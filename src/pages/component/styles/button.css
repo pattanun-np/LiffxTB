@@ -1,0 +1,20 @@
+.button-sub {
+  padding: 10px;
+  width: 220px;
+  border: none;
+  border-radius: 20px;
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(246, 98, 128, 1) 0%,
+    rgba(248, 129, 135, 1) 98.3%
+  );
+}
+
+.button-sub:active {
+  width: 215px;
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgb(253, 52, 92) 0%,
+    rgba(248, 129, 135, 1) 98.3%
+  );
+}
