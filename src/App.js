@@ -1,10 +1,11 @@
 import React from "react";
-import Form from "./pages/Form";
+import Home from "./pages/Home";
 
+import StepForm from "./pages/Form/StepFrom";
 function App() {
   return (
-    <div style={{"margin":"30px"}}>
-        <Form />
+    <div>
+      <StepForm />
     </div>
   );
 }

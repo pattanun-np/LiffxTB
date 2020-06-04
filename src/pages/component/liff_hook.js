@@ -10,9 +10,9 @@ function useLiff({ liffId }) {
     setLoading(true);
     try {
       await liff.init({ liffId });
-      console.log("success liff init");
+      // console.log("success liff init");
     } catch (error) {
-      console.log({ error });
+      // console.log({ error });
       setError(error);
     } finally {
       setLoading(false);
@@ -24,7 +24,7 @@ function useLiff({ liffId }) {
     try {
       setProfile(await liff.getProfile());
     } catch (error) {
-      console.log({ error });
+      // console.log({ error });
       setError(error);
     } finally {
       setLoading(false);
@@ -35,13 +35,17 @@ function useLiff({ liffId }) {
     setLoading(true);
     try {
       liff.sendMessages([{ type: "text", text }]);
-      console.log(`success send message: ${text}`);
+      // console.log(`success send message: ${text}`);
     } catch (error) {
-      console.log({ error });
+      // console.log({ error });
       setError(error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const closeLIFF = async () => {
+    await liff.closeWindow();
   };
 
   useEffect(() => {
