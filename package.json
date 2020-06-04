@@ -15,8 +15,6 @@
     "react-hot-loader": "^4.12.21",
     "react-lottie": "^1.2.3",
     "react-scripts": "3.4.1",
-    "screenz": "^1.0.0",
-    "vconsole": "^3.3.4",
     "yup": "^0.29.1"
   },
   "scripts": {
