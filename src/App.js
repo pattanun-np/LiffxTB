@@ -1,11 +1,21 @@
 import React from "react";
-import Home from "./pages/Home";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import FormHome from "./pages/Form/FormHome";
+import FormMain from "./pages/Form/FormMain";
+import History from "./pages/Form/History";
+import Guide from "./pages/Form/guide";
 
-import StepForm from "./pages/Form/StepFrom";
 function App() {
   return (
-    <div>
-      <StepForm />
+    <div className="App container">
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={FormHome} />
+          <Route path="/form" component={FormMain} />
+          <Route path="/history" component={History} />
+          <Route path="/guide" component={Guide} />
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
