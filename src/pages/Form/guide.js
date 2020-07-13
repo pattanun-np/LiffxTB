@@ -43,13 +43,7 @@ const defaultProps = {
 };
 
 export default function StepperForm() {
-  const [activeStep, setActiveStep] = React.useState(0);
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
-
-  const { loading, profile } = useLiff({
-    liffId,
-  });
 
   return (
     <div>

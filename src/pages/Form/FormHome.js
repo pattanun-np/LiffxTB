@@ -19,8 +19,8 @@ const liffId = "1654260546-VwqZxy4o";
 const useStyles = makeStyles({
   root: {
     minWidth: "320px",
+    minHeight: "680px",
     fontFamily: "Kanit",
-    height: "800px",
   },
   CardBtn: {
     margin: "auto",
@@ -30,38 +30,24 @@ const useStyles = makeStyles({
   },
   Button: {
     background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-    border: 0,
     borderRadius: 50,
     fontFamily: "Kanit",
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     color: "white",
-    height: "64",
-    width: "512px",
-    padding: "30px",
+    height: "64px",
+    width: "256px",
   },
-  Button2: {
-    background:
-      "radial-gradient( circle farthest-corner at 10% 20%,  rgba(102,116,236,1) 0%, rgba(50,231,219,1) 90% )",
-    border: 0,
-    fontFamily: "Kanit",
-    borderRadius: 50,
-    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-    color: "white",
-    height: "64",
-    width: "512px",
-    padding: "30px",
-  },
+
   Button3: {
     background:
       "linear-gradient( 109.6deg,  rgba(255,207,84,1) 11.2%, rgba(255,158,27,1) 91.1% )",
-    border: 0,
+
     fontFamily: "Kanit",
     borderRadius: 50,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     color: "white",
-    height: "64",
-    width: "512px",
-    padding: "30px",
+    height: "64px",
+    width: "256px",
   },
   Buttoninfo: {
     background:
@@ -123,7 +109,11 @@ export default function FormHome() {
             </Box>
           )}
         </CardContent>
-        <CardActions className={classes.CardBtn}>
+        <CardActions
+          display="flex"
+          className={classes.CardBtn}
+          justifyContent="center"
+        >
           <Button size="large" className={classes.Button}>
             <Link to="/form" style={{ color: "white" }}>
               <i className="fas fa-notes-medical"></i>&nbsp;
@@ -131,14 +121,12 @@ export default function FormHome() {
             </Link>
           </Button>
         </CardActions>
-        <CardActions className={classes.CardBtn}>
-          <Button size="large" className={classes.Button2}>
-            <Link to="/history" style={{ color: "white" }}>
-              <i className="fas fa-history"></i>&nbsp;ประวัติการคัดกรอง
-            </Link>
-          </Button>
-        </CardActions>
-        <CardActions className={classes.CardBtn}>
+
+        <CardActions
+          display="flex"
+          className={classes.CardBtn}
+          justifyContent="center"
+        >
           <Button size="large" className={classes.Button3}>
             <Link to="/guide" style={{ color: "white" }}>
               <i className="fas fa-question-circle"></i>&nbsp; คำแนะนำ

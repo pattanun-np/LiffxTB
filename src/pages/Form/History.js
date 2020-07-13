@@ -1,12 +1,6 @@
 import React from "react";
 import {
   makeStyles,
-  createMuiTheme,
-  Card,
-  CardContent,
-  CardActions,
-  Avatar,
-  Box,
   TablePagination,
   TableCell,
   Table,
@@ -17,9 +11,7 @@ import {
   Grid,
   TableRow,
   Typography,
-  Button,
 } from "@material-ui/core/";
-import { Link } from "react-router-dom";
 import useLiff from "../component/liff_hook";
 
 const liffId = "1654260546-VwqZxy4o";
@@ -77,13 +69,8 @@ const rows = [
 ];
 
 export default function StepperForm() {
-  const [activeStep, setActiveStep] = React.useState(0);
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
 
-  const { loading, profile } = useLiff({
-    liffId,
-  });
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
