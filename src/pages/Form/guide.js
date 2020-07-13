@@ -1,19 +1,5 @@
 import React from "react";
-import {
-  makeStyles,
-  createMuiTheme,
-  Card,
-  CardContent,
-  CardActions,
-  Avatar,
-  Box,
-  Typography,
-  Button,
-} from "@material-ui/core/";
-import { Link } from "react-router-dom";
-import useLiff from "../component/liff_hook";
-
-const liffId = "1654260546-VwqZxy4o";
+import { makeStyles, Card } from "@material-ui/core/";
 
 const useStyles = makeStyles({
   root: {
@@ -35,12 +21,6 @@ const useStyles = makeStyles({
     fontStyle: "Bold",
   },
 });
-const defaultProps = {
-  bgcolor: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-  m: 1,
-  border: 5,
-  style: { width: "120px", height: "120px" },
-};
 
 export default function StepperForm() {
   const classes = useStyles();

@@ -44,10 +44,6 @@ function useLiff({ liffId }) {
     }
   };
 
-  const closeLIFF = async () => {
-    await liff.closeWindow();
-  };
-
   useEffect(() => {
     if (liffId) {
       initLiff({ liffId });

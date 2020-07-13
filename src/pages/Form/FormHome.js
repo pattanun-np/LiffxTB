@@ -1,13 +1,11 @@
 import React from "react";
 import {
   makeStyles,
-  createMuiTheme,
   Card,
   CardContent,
   CardActions,
   Avatar,
   Box,
-  Modal,
   Typography,
   Button,
 } from "@material-ui/core/";
@@ -76,11 +74,9 @@ const defaultProps = {
 };
 
 export default function FormHome() {
-  const [activeStep, setActiveStep] = React.useState(0);
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
 
-  const { loading, profile } = useLiff({
+  const { profile } = useLiff({
     liffId,
   });
 

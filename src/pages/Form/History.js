@@ -12,9 +12,6 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core/";
-import useLiff from "../component/liff_hook";
-
-const liffId = "1654260546-VwqZxy4o";
 
 const useStyles = makeStyles({
   root: {

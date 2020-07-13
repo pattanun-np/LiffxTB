@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  makeStyles,
-  createMuiTheme,
-  BottomNavigation,
-  Box,
-  BottomNavigationAction,
-  Modal,
-  Typography,
-  Button,
-} from "@material-ui/core/";
-import RestoreIcon from "@material-ui/icons/Restore";
+import { makeStyles, Button } from "@material-ui/core/";
 const useStyles = makeStyles({
   ButtonNext: {
     background:

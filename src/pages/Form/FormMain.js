@@ -1,23 +1,11 @@
-import React, { Fragment } from "react";
+import React from "react";
 
 import {
-  Grid,
   makeStyles,
-  TextField,
-  InputLabel,
-  FormHelperText,
-  FormControl,
   Step,
   Stepper,
-  ButtonGroup,
   StepLabel,
-  BottomNavigation,
-  Card,
   Typography,
-  Icon,
-  CardContent,
-  CardActionArea,
-  LinearProgress,
   Button,
 } from "@material-ui/core/";
 import Gender from "./Gender";
