@@ -84,9 +84,6 @@ export default function FormHome() {
     <div>
       <Card className={classes.root}>
         <CardContent>
-          <Button size="large" className={classes.Buttoninfo}>
-            <i className="fas fa-question-circle"></i>&nbsp; นี่คืออะไร ?
-          </Button>
           {profile && (
             <Box display="flex" justifyContent="center">
               <Avatar

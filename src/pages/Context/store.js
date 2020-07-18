@@ -3,12 +3,12 @@ import React from "react";
 export const StoreContext = React.createContext({});
 
 export const StoreContextProvider = ({ children }) => {
-  const [information, setInformation] = useState({
+  const [information, setInformation] = React.useState({
     firstName: undefined,
     lastName: undefined,
     nickname: undefined,
   });
-  const [account, setAccount] = useState({
+  const [account, setAccount] = React.useState({
     email: undefined,
     password: undefined,
     confirmPassword: undefined,

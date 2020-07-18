@@ -14,13 +14,13 @@ const useStyles = makeStyles({
     margin: "15px",
   },
 });
-export default function Nextpage() {
+export default function Nextpage(props) {
   const classes = useStyles();
 
   return (
     <div>
-      <Button className={classes.ButtonNext}>
-        ถัดไป&nbsp;
+      <Button className={classes.ButtonNext} onClick={props.click}>
+        {props.activeStep}&nbsp;
         <i class="fas fa-arrow-right"></i>
       </Button>
     </div>

@@ -7,10 +7,13 @@ import {
   StepLabel,
   Typography,
   Button,
+  Grid,
 } from "@material-ui/core/";
 import Gender from "./Gender";
+import Age from "./Age";
 import Nextpage from "../component/ButtonNext";
 import Backpage from "../component/ButtonBack";
+
 const useStyles = makeStyles({
   root: {
     minWidth: "320px",
@@ -38,7 +41,7 @@ const useStyles = makeStyles({
   },
 });
 function getSteps() {
-  return ["Select campaign settings", "Create an ad group", "Create an ad"];
+  return ["ข้อมูลเพศ", "ข้อมูลอายุ", "แบบคัดกรอง"];
 }
 
 function getStepContent(step) {
@@ -46,7 +49,7 @@ function getStepContent(step) {
     case 0:
       return <Gender />;
     case 1:
-      return "What is an ad group anyways?";
+      return <Age />;
     case 2:
       return "This is the bit I really care about!";
     default:
@@ -59,10 +62,6 @@ export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
-
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
@@ -83,36 +82,17 @@ export default function HorizontalLinearStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
   const handleReset = () => {
     setActiveStep(0);
   };
 
   return (
     <div className={classes.root}>
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = (
-              <Typography variant="caption">Optional</Typography>
-            );
-          }
+
           if (isStepSkipped(index)) {
             stepProps.completed = false;
           }
@@ -139,27 +119,19 @@ export default function HorizontalLinearStepper() {
               {getStepContent(activeStep)}
             </Typography>
             <div>
-              {/* <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                className={classes.button}
-              >
-                Back
-              </Button> */}
-              <Backpage onClick={handleBack}></Backpage>
-              {isStepOptional(activeStep) && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSkip}
-                  className={classes.button}
-                >
-                  Skip
-                </Button>
-              )}
-              <Nextpage onClick={handleNext}>
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-              </Nextpage>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Backpage click={handleBack} disabled={activeStep}></Backpage>
+                </Grid>
+                <Grid item xs={6}>
+                  <Nextpage
+                    click={handleNext}
+                    activeStep={
+                      activeStep === steps.length - 1 ? "จบ" : "ถัดไป"
+                    }
+                  ></Nextpage>
+                </Grid>
+              </Grid>
             </div>
           </div>
         )}
