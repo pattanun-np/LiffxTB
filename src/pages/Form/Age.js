@@ -43,7 +43,10 @@ export default function Information() {
             component="h2"
             style={{ fontFamily: "Kanit" }}
           >
-            อายุของคุณ คือ ?
+            {userAge.age === ""
+              ? "ระบุอายุ"
+              : "อายุของคุณ" + userAge.age + "ปี"}
+            &nbsp;
           </Typography>
         </Grid>
 
@@ -53,7 +56,7 @@ export default function Information() {
               className={classes.Input}
               type="number"
               InputProps={{ inputProps: { min: 0, max: 100 } }}
-              label="อายุเท่าไหร่ ?"
+              label="อายุเท่าไหร่?"
               value={userAge.age}
               endAdornment={<InputAdornment position="end">ปี</InputAdornment>}
               onChange={handleChange}

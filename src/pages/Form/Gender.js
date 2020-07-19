@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, createContext } from "react";
 
 import {
   Grid,
@@ -27,7 +27,6 @@ const useStyles = makeStyles({
     maxWidth: "480px",
     width: "150px",
     height: "180px",
-    padding: "15px",
     boxShadow: "0 3px 5px 2px rgba(10, 10,10, 0.1)",
     borderRadius: 25,
   },
@@ -39,6 +38,7 @@ const useStyles = makeStyles({
     color: "#eaeaf0",
   },
 });
+export const GenderContext = createContext({});
 
 export default function Information() {
   const classes = useStyles();
@@ -55,7 +55,7 @@ export default function Information() {
             component="h2"
             style={{ fontFamily: "Kanit" }}
           >
-            เพศของคุณ คือ {userAns.gender}
+            {userAns.gender === "" ? "ระบุเพศ" : "เพศของคุณ " + userAns.gender}
           </Typography>
         </Grid>
 

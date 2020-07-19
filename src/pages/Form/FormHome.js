@@ -8,6 +8,7 @@ import {
   Box,
   Typography,
   Button,
+  Grid,
 } from "@material-ui/core/";
 import { Link } from "react-router-dom";
 import useLiff from "../component/liff_hook";
@@ -102,30 +103,27 @@ export default function FormHome() {
             </Box>
           )}
         </CardContent>
-        <CardActions
-          display="flex"
-          className={classes.CardBtn}
-          justifyContent="center"
-        >
-          <Button size="large" className={classes.Button}>
-            <Link to="/form" style={{ color: "white" }}>
-              <i className="fas fa-notes-medical"></i>&nbsp;
-              ตอบแบบคัดกรองวัณโรคปอด
-            </Link>
-          </Button>
-        </CardActions>
-
-        <CardActions
-          display="flex"
-          className={classes.CardBtn}
-          justifyContent="center"
-        >
-          <Button size="large" className={classes.Button3}>
-            <Link to="/guide" style={{ color: "white" }}>
-              <i className="fas fa-question-circle"></i>&nbsp; คำแนะนำ
-            </Link>
-          </Button>
-        </CardActions>
+        <Grid>
+          <Grid item xm={2}>
+            <CardActions className={classes.CardBtn} justifyContent="center">
+              <Button size="large" className={classes.Button}>
+                <Link to="/form" style={{ color: "white" }}>
+                  <i className="fas fa-notes-medical"></i>&nbsp;
+                  ตอบแบบคัดกรองวัณโรคปอด
+                </Link>
+              </Button>
+            </CardActions>
+          </Grid>
+          <Grid item xm={2}>
+            <CardActions className={classes.CardBtn} justifyContent="center">
+              <Button size="large" className={classes.Button3}>
+                <Link to="/guide" style={{ color: "white" }}>
+                  <i className="fas fa-question-circle"></i>&nbsp; คำแนะนำ
+                </Link>
+              </Button>
+            </CardActions>
+          </Grid>
+        </Grid>
       </Card>
     </div>
   );

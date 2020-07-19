@@ -59,10 +59,11 @@ export default function StepperForm() {
           โปรดป้องกันการแพร่กระจายเชื้อตามคำแนะนำและรีบไปพบแพทย์ทันทีเพื่อรับการตรวจอย่างละเอียดต่อไป
         </CardContent>
         <Grid container justify="center">
-          <Button startIcon={<HomeIcon />} className={classes.ButtonHome}>
-            <Link to="/" style={{ color: "white" }}></Link>
-            กลับหน้าหลัก
-          </Button>
+          <Link to="/">
+            <Button startIcon={<HomeIcon />} className={classes.ButtonHome}>
+              กลับหน้าหลัก
+            </Button>
+          </Link>
         </Grid>
       </Card>
     </div>
