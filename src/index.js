@@ -1,15 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
-import { AppContainer } from 'react-hot-loader';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+import { AppContainer } from "react-hot-loader";
+import { StoreContextProvider } from "./pages/Context/store";
 
 ReactDOM.render(
-    <AppContainer>
-    <App />
-    </AppContainer>,
-  document.getElementById('root')
+  <AppContainer>
+    <StoreContextProvider>
+      <App />
+    </StoreContextProvider>
+  </AppContainer>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
@@ -17,15 +20,14 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-if (module.hot){
-  module.hot.accept("./App", () =>{
+if (module.hot) {
+  module.hot.accept("./App", () => {
     const NextApp = require("./App").default;
-      ReactDOM.render(
-        <AppContainer>
-            <NextApp/>
-        </AppContainer>
-        ,
-        document.getElementById('root')
-      )
-  })
+    ReactDOM.render(
+      <AppContainer>
+        <NextApp />
+      </AppContainer>,
+      document.getElementById("root")
+    );
+  });
 }

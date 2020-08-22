@@ -3,20 +3,12 @@ import React from "react";
 export const StoreContext = React.createContext({});
 
 export const StoreContextProvider = ({ children }) => {
-  const [information, setInformation] = React.useState({
-    firstName: undefined,
-    lastName: undefined,
-    nickname: undefined,
-  });
-  const [account, setAccount] = React.useState({
-    email: undefined,
-    password: undefined,
-    confirmPassword: undefined,
-  });
+  const [gender, setGender] = React.useState("ระบุเพศ");
+  const [age, setAge] = React.useState("");
 
   const store = {
-    information: [information, setInformation],
-    account: [account, setAccount],
+    gender: [gender, setGender],
+    age: [age, setAge],
   };
   console.log(store);
   return (

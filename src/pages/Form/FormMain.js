@@ -8,6 +8,7 @@ import {
   Typography,
   Button,
   Grid,
+  Box,
   Card,
 } from "@material-ui/core/";
 
@@ -16,10 +17,10 @@ import swal from "sweetalert";
 import Gender from "./Gender";
 import Age from "./Age";
 import Screening from "./ScreeningForm";
-import Nextpage from "../component/ButtonNext";
-import Backpage from "../component/ButtonBack";
 import HomeIcon from "@material-ui/icons/Home";
-
+import useLiff from "../component/liff_hook";
+import { StoreContext } from "../Context/store";
+const liffId = "1654260546-VwqZxy4o";
 const useStyles = makeStyles({
   root: {
     minWidth: "320px",
@@ -66,13 +67,39 @@ const useStyles = makeStyles({
     padding: 5,
     margin: "15px",
   },
-  Button: {
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+  ButtonBack: {
+    background:
+      "linear-gradient( 100.6deg,  rgba(0,200,180,1) 11.2%, rgba(0,140,255,1) 91.1% )",
+
+    fontFamily: "Kanit",
+    boxShadow: "0 3px 5px 2px rgba(0, 100, 255, .3)",
+    color: "white",
+    width: "128px",
     borderRadius: 50,
+    padding: 5,
+    margin: "15px",
+  },
+  ButtonNext: {
+    background:
+      "linear-gradient( 200.6deg,  rgba(255,207,84,1) 11.2%, rgba(255,158,27,1) 91.1% )",
+
     fontFamily: "Kanit",
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     color: "white",
-    height: "24px",
+    width: "140px",
+    borderRadius: 50,
+    padding: 5,
+    margin: "15px",
+  },
+  Button: {
+    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    borderRadius: "50px",
+    fontSize: "14px",
+    fontFamily: "Kanit",
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    height: "30px",
+    float: "right",
     width: "auto",
   },
   Step: {
@@ -83,23 +110,31 @@ function getSteps() {
   return ["ข้อมูลเพศ", "ข้อมูลอายุ", "แบบคัดกรอง"];
 }
 const genderSchema = yup.object().shape({
-  gender: yup.string().required("กรุณาระบุบเพศ"),
+  gender: yup.string().required("กรุณาระบุเพศ"),
+});
+const ageSchema = yup.object().shape({
+  age: yup.number().required("กรุณากรอกอายุ").positive().integer(),
 });
 
-export default function HorizontalLinearStepper() {
+export default function FormMain() {
   const classes = useStyles();
+  const { gender, age } = React.useContext(StoreContext);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const { closeLiff } = useLiff({
+    liffId,
+  });
   const genderForm = useForm({
     validationSchema: genderSchema,
+  });
+
+  const ageForm = useForm({
+    validationSchema: ageSchema,
   });
   const steps = getSteps();
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
-  };
-  const onSubmit = (data) => {
-    console.log(data);
   };
 
   const handleNext = () => {
@@ -131,18 +166,37 @@ export default function HorizontalLinearStepper() {
       }
     });
   };
+
+  const onSubmit = (data) => {
+    data.preventDefault();
+    console.log(data);
+    if (activeStep === 0) {
+      gender[1](data);
+    } else if (activeStep === 1) {
+      age[1](data);
+    }
+    handleNext();
+  };
+  function sendValidation() {
+    if (activeStep === 0) {
+      genderForm.handleSubmit(onSubmit);
+    } else if (activeStep === 1) {
+      ageForm.handleSubmit(onSubmit);
+    }
+  }
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <Gender formProps={genderForm} />;
+        return <Gender formProps={genderForm} data={gender} />;
       case 1:
-        return <Age />;
+        return <Age formProps={ageForm} data={age} />;
       case 2:
         return <Screening />;
       default:
         return "Unknown step";
     }
   }
+
   return (
     <div className={classes.root}>
       <Grid container justify="center">
@@ -155,7 +209,7 @@ export default function HorizontalLinearStepper() {
           {activeStep === steps.length ? "" : "ยกเลิก"}
         </Button>
       </Grid>
-      <form onSubmit={genderForm.handleSubmit(onSubmit)}>
+      <form onSubmit={sendValidation}>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label, index) => {
             const stepProps = {};
@@ -171,46 +225,65 @@ export default function HorizontalLinearStepper() {
             );
           })}
         </Stepper>
-      </form>
-      <div>
-        {activeStep === steps.length ? (
-          <div>
-            <Grid container justify="center">
-              <Typography className={classes.instructions} justify="center">
-                ตอบแบบคัดกรองเสร็จสิ้น
-              </Typography>
-              <Card className={classes.Card}>
-                <Typography className={classes.instructions}>
-                  ผลการคัดกรอง <Button className={classes.Button}>ปิด</Button>
-                </Typography>
-              </Card>
-            </Grid>
-          </div>
-        ) : (
-          <div>
-            <Typography className={classes.instructions}>
-              {getStepContent(activeStep)}
-            </Typography>
+        <div>
+          {activeStep === steps.length ? (
             <div>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Backpage click={handleBack} disabled={activeStep}></Backpage>
-                </Grid>
-                <Grid item xs={6}>
-                  <Nextpage
-                    click={handleNext}
-                    activeStep={
-                      activeStep === steps.length - 1
-                        ? "ส่งแบบคัดกรอง"
-                        : "ถัดไป"
-                    }
-                  ></Nextpage>
-                </Grid>
-              </Grid>
+              <Box display="flex" justifyContent="center">
+                <Typography className={classes.instructions} justify="center">
+                  ตอบแบบคัดกรองเสร็จสิ้น
+                </Typography>
+              </Box>
+              <Box display="flex" justifyContent="center">
+                <Card className={classes.Card}>
+                  <Box justifyContent="flexEnd">
+                    <Button
+                      className={classes.Button}
+                      onClick={() => {
+                        closeLiff();
+                      }}
+                    >
+                      ปิด
+                    </Button>
+                  </Box>
+                  <Box display="flex" justifyContent="center">
+                    <Typography className={classes.instructions}>
+                      ผลการคัดกรอง
+                    </Typography>
+                  </Box>
+                </Card>
+              </Box>
             </div>
-          </div>
-        )}
-      </div>
+          ) : (
+            <div>
+              <Typography className={classes.instructions}>
+                {getStepContent(activeStep)}
+              </Typography>
+              <Box display="flex" justifyContent="center">
+                <Button
+                  variant="contained"
+                  className={classes.ButtonNext}
+                  type="button"
+                >
+                  {activeStep === steps.length - 1 ? "ส่งแบบคัดกรอง" : "ถัดไป"}
+                  &nbsp;
+                  <i class="fas fa-arrow-right"></i>
+                </Button>
+              </Box>
+              <div>
+                <Box display="flex" justifyContent="center">
+                  <Button
+                    className={classes.ButtonBack}
+                    onClick={handleBack}
+                    disabled={activeStep === 0 ? true : false}
+                  >
+                    <i class="fas fa-arrow-left"></i>&nbsp; ย้อนกลับ
+                  </Button>
+                </Box>
+              </div>
+            </div>
+          )}
+        </div>
+      </form>
     </div>
   );
 }

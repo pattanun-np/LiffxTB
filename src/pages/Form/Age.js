@@ -23,19 +23,20 @@ const useStyles = makeStyles({
   Step: {
     color: "#eaeaf0",
   },
+  errorMessage: {
+    color: "red",
+    fontSize: "0.9rem",
+    marginTop: "0.2rem",
+  },
 });
 
-export default function Information() {
+export default function Age({ formProps: { register, errors }, data }) {
   const classes = useStyles();
-  const [userAge, setUserAge] = React.useState({ age: "" });
+  const { age } = data[0];
 
-  const handleChange = (event) => {
-    setUserAge({ ...userAge, age: event.target.value });
-  };
   return (
     <Fragment>
       <div className={classes.root}>
-        {/* <p>#Debug {JSON.stringify(userAge)}</p> */}
         <Grid container justify="center">
           <Typography
             gutterBottom
@@ -43,9 +44,7 @@ export default function Information() {
             component="h2"
             style={{ fontFamily: "Kanit" }}
           >
-            {userAge.age === ""
-              ? "ระบุอายุ"
-              : "อายุของคุณ" + userAge.age + "ปี"}
+            {age === "" ? "ระบุอายุ" : "คุณอายุ" + age + "ปี"}
             &nbsp;
           </Typography>
         </Grid>
@@ -53,16 +52,24 @@ export default function Information() {
         <Grid container justify="center">
           <Grid item>
             <TextField
+              id="age"
+              name="age"
               className={classes.Input}
               type="number"
+              variant="outlined"
               InputProps={{ inputProps: { min: 0, max: 100 } }}
               label="อายุเท่าไหร่?"
-              value={userAge.age}
               endAdornment={<InputAdornment position="end">ปี</InputAdornment>}
-              onChange={handleChange}
+              margin="normal"
+              inputRef={register}
+              error={!!errors.age}
+              defaultValue={age}
             />
           </Grid>
         </Grid>
+        {errors.age && (
+          <p className={classes.errorMessage}>{errors.age.message}</p>
+        )}
       </div>
     </Fragment>
   );

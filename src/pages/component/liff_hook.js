@@ -43,6 +43,9 @@ function useLiff({ liffId }) {
       setLoading(false);
     }
   };
+  const closeLiff = () => {
+    liff.closeWindow();
+  };
 
   useEffect(() => {
     if (liffId) {
@@ -63,6 +66,7 @@ function useLiff({ liffId }) {
     error,
     profile,
     sendMessage,
+    closeLiff,
   };
 }
 
