@@ -13,7 +13,8 @@ import {
   Card,
   StepConnector,
 } from "@material-ui/core/";
-
+import Lottie from "react-lottie";
+import * as loadingData from "../component/Loading/loading.json";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import swal from "sweetalert";
@@ -28,7 +29,14 @@ import AssignmentOutlinedIcon from "@material-ui/icons/AssignmentOutlined";
 import { StoreContext } from "../Context/store";
 import useLiff from "../component/liff_hook";
 const liffId = "1654260546-VwqZxy4o";
-
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 const ColorlibConnector = withStyles({
   alternativeLabel: {
     top: 22,
@@ -202,10 +210,13 @@ ColorlibStepIcon.propTypes = {
 };
 export default function FormMain() {
   const classes = useStyles();
-  const { closeLiff } = useLiff({
+  const [loading, setLoading] = React.useState(false);
+  const { closeLiff, profile } = useLiff({
     liffId,
   });
-  const { activeStep, userData, finalData } = React.useContext(StoreContext);
+  const { activeStep, userData, finalData, sumscore } = React.useContext(
+    StoreContext
+  );
 
   const handleConfrim = () => {
     swal({
@@ -239,6 +250,12 @@ export default function FormMain() {
     }
   }
 
+  console.log(`DebugData ${JSON.stringify(userData)}`);
+  console.log(`DebugData ${JSON.stringify(sumscore)}`);
+  console.log(`DebugFinal ${JSON.stringify(finalData)}`);
+  setInterval(() => {
+    setLoading(false);
+  }, 2000);
   return (
     <div className={classes.root}>
       <Button onClick={() => closeLiff()} className={classes.Button}>
@@ -247,11 +264,10 @@ export default function FormMain() {
           style={{
             marginRight: "5px",
           }}
-        ></i>{" "}
+        ></i>
         ปิด
       </Button>
-      <p>DebugData{JSON.stringify(userData)}</p>
-      <p>DebugFinal{JSON.stringify(finalData)}</p>
+
       <Grid container justify="center">
         <Button
           disable={activeStep === step.length ? false : true}
@@ -290,6 +306,32 @@ export default function FormMain() {
                   <Typography className={classes.instructions}>
                     ตอบแบบคัดกรองเสร็จสิ้น
                   </Typography>
+                </Box>
+                <Box display="flex" justifyContent="center">
+                  {loading ? (
+                    <Lottie options={defaultOptions} height={140} width={140} />
+                  ) : (
+                    <Box display="flex" justifyContent="center">
+                      {loading ? (
+                        <Lottie
+                          options={defaultOptions}
+                          height={140}
+                          width={140}
+                        />
+                      ) : (
+                        <div>
+                          {profile && (
+                            <Box display="flex" justifyContent="center">
+                              <Typography className={classes.text}>
+                                รหัสอ้างอิงผู้ใช้<br></br>
+                                {profile.userId}
+                              </Typography>
+                            </Box>
+                          )}
+                        </div>
+                      )}
+                    </Box>
+                  )}
                 </Box>
               </Card>
             </FadeIn>

@@ -4,13 +4,10 @@ import FormMain from "../Form/FormMain";
 export const StoreContext = React.createContext({});
 export const StepContext = () => {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [userData, setUserData] = React.useState([]);
-  const [finalData, setFinalData] = React.useState([]);
-  function submitData() {
-    setActiveStep(activeStep + 1);
-    setFinalData((finalData) => [...finalData, userData]);
-    setUserData("");
-  }
+  const [sumscore, setSumScore] = React.useState(0);
+  const [userData, setUserData] = React.useState("");
+  const [finalData, setFinalData] = React.useState("");
+
   return (
     <StoreContext.Provider
       value={{
@@ -20,7 +17,8 @@ export const StepContext = () => {
         setUserData,
         finalData,
         setFinalData,
-        submitData,
+        sumscore,
+        setSumScore,
       }}
     >
       <FormMain />

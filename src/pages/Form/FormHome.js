@@ -131,7 +131,7 @@ export default function FormHome() {
                 {profile && (
                   <Box display="flex" justifyContent="center">
                     <Typography className={classes.text}>
-                      สวัสดีครับคุณ&nbsp;
+                      สวัสดีครับคุณ<br></br>
                       {profile.displayName}
                     </Typography>
                   </Box>

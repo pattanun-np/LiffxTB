@@ -8,10 +8,12 @@ import {
   Card,
   Box,
   Button,
+  Collapse,
   CardActionArea,
   CardContent,
   CardMedia,
 } from "@material-ui/core/";
+import { Alert, AlertTitle } from "@material-ui/lab";
 const useStyles = makeStyles({
   root: {
     minWidth: "320px",
@@ -72,14 +74,33 @@ const useStyles = makeStyles({
 
 export default function Gender() {
   const classes = useStyles();
-
+  const [open, setOpen] = React.useState(false);
   const { activeStep, setActiveStep, userData, setUserData } = React.useContext(
     StoreContext
   );
+  function next() {
+    console.log(userData["Age"].length);
+    if (userData["Gender"] === "ชาย" || userData["Gender"] === "หญิง") {
+      setActiveStep(activeStep + 1);
+    } else {
+      setOpen(true);
+      setInterval(() => {
+        setOpen(false);
+      }, 2500);
+    }
+  }
   return (
     <Fragment>
       <div className={classes.root}>
         <FadeIn>
+          <Collapse in={open}>
+            <Alert severity="error" style={{ fontFamily: "Kanit" }}>
+              <AlertTitle style={{ fontFamily: "Kanit" }}>
+                กรุณาเลือกเพศ
+              </AlertTitle>
+              ชาย หรือ หญิง
+            </Alert>
+          </Collapse>
           <Grid container justify="center">
             <Typography
               gutterBottom
@@ -87,7 +108,7 @@ export default function Gender() {
               component="h2"
               style={{ fontFamily: "Kanit" }}
             >
-              {userData["Gender"] === ""
+              {typeof userData["Gender"] === "undefined"
                 ? "ระบุเพศ"
                 : "เพศของคุณ " + userData["Gender"]}
             </Typography>
@@ -196,6 +217,9 @@ export default function Gender() {
           <Box display="flex" justifyContent="center">
             <Button
               variant="contained"
+              disabled={
+                typeof userData["Gender"] === "undefined" ? true : false
+              }
               className={classes.ButtonNext}
               onClick={(e) => setActiveStep(activeStep + 1)}
             >
@@ -207,7 +231,7 @@ export default function Gender() {
             <Button
               variant="contained"
               className={classes.ButtonBack}
-              onClick={() => setActiveStep(activeStep - 1)}
+              onClick={next}
             >
               ย้อนกลับ &nbsp;
               <i class="fas fa-arrow-left"></i>

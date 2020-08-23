@@ -6,9 +6,11 @@ import {
   Typography,
   Box,
   Button,
+  Collapse,
   TextField,
   InputAdornment,
 } from "@material-ui/core/";
+import { Alert, AlertTitle } from "@material-ui/lab";
 const useStyles = makeStyles({
   root: {
     minWidth: "320px",
@@ -57,12 +59,36 @@ const useStyles = makeStyles({
 
 export default function Age() {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
   const { activeStep, setActiveStep, userData, setUserData } = React.useContext(
     StoreContext
   );
+  function next() {
+    console.log(userData["Age"].length);
+    if (
+      userData["Age"] > 0 &&
+      userData["Age"].length > 0 &&
+      userData["Age"].length <= 3 &&
+      userData["Age"] <= 100
+    ) {
+      setActiveStep(activeStep + 1);
+    } else {
+      setOpen(true);
+      setInterval(() => {
+        setOpen(false);
+      }, 2500);
+    }
+  }
+
   return (
     <Fragment>
       <div className={classes.root}>
+        <Collapse in={open}>
+          <Alert severity="error" style={{ fontFamily: "Kanit" }}>
+            <AlertTitle style={{ fontFamily: "Kanit" }}>ระบุอายุผิด</AlertTitle>
+            อายุต้องไม่ท่ากับ 0 และไม่มากกว่า 100 ปี
+          </Alert>
+        </Collapse>
         <Grid container justify="center">
           <Typography
             gutterBottom
@@ -70,12 +96,18 @@ export default function Age() {
             component="h2"
             style={{ fontFamily: "Kanit" }}
           >
-            {userData["Age"] === ""
+            {typeof userData["Age"] === "undefined"
               ? "ระบุอายุ"
               : "คุณอายุ " + userData["Age"] + " ปี"}
             &nbsp;
           </Typography>
         </Grid>
+        <br></br>
+        <p style={{ display: "flex", color: "red", justifyContent: "center" }}>
+          {typeof userData["Age"] === "undefined"
+            ? "**โปรดเเตะที่ช่องและกรอกอายุของคุณ"
+            : ""}
+        </p>
 
         <Grid container justify="center">
           <Grid item>
@@ -89,6 +121,7 @@ export default function Age() {
               label={<p style={{ fontFamily: "Kanit" }}>คุณอายุเท่าไหร่ ?</p>}
               endAdornment={<InputAdornment position="end">ปี</InputAdornment>}
               margin="normal"
+              error={typeof userData["Age"] === "undefined" ? true : false}
               onChange={(e) => {
                 setUserData({ ...userData, Age: e.target.value });
               }}
@@ -97,9 +130,11 @@ export default function Age() {
         </Grid>
         <Box display="flex" justifyContent="center">
           <Button
+            type="submit"
+            disabled={typeof userData["Age"] === "undefined" ? true : false}
             variant="contained"
             className={classes.ButtonNext}
-            onClick={() => setActiveStep(activeStep + 1)}
+            onClick={next}
           >
             ถัดไป &nbsp;
             <i class="fas fa-arrow-right"></i>

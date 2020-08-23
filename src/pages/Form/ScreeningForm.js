@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { StoreContext } from "../Context/store";
 import FadeIn from "react-fade-in";
+
 import {
   Grid,
   makeStyles,
@@ -10,10 +11,12 @@ import {
   Card,
   Box,
   Button,
+  Collapse,
   FormControlLabel,
   FormControl,
 } from "@material-ui/core/";
 import question from "./Question";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 const useStyles = makeStyles({
   root: {
@@ -78,23 +81,37 @@ const useStyles = makeStyles({
 
 export default function Information() {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
   const {
     activeStep,
     setActiveStep,
-
-    submitData,
+    userData,
+    setUserData,
+    setFinalData,
   } = React.useContext(StoreContext);
+
   const quiz = question.map((q) => (
     <Card className={classes.Card} key={q.id}>
       <h1 className={classes.quiz}>คำถามที่ : {q.id}</h1>
+      <p style={{ fontSize: "15px", color: "red" }}>{q.note}</p>
       <Typography className={classes.Text}>{q.question} </Typography>
-      <RadioGroup row aria-label="position" name="position" defaultValue="top">
+      <RadioGroup
+        row
+        aria-label="position"
+        name={"No" + q.id}
+        defaultValue="top"
+        onChange={(e) => {
+          setUserData({
+            ...userData,
+            [e.target.name]: e.target.value,
+          });
+        }}
+      >
         <Grid item xs={6}>
           <FormControl component="fieldset" className={classes.Text}>
             <FormControlLabel
               className={classes.Text}
-              value={q.ans[0]}
-              control={<Radio color="secondary" />}
+              control={<Radio value={`${q.score[0]}`} color="secondary" />}
               label={<p className={classes.Text}>{q.ans[0]}</p>}
               labelPlacement="bottom"
             />
@@ -104,8 +121,7 @@ export default function Information() {
           <FormControl component="fieldset">
             <FormControlLabel
               className={classes.Text}
-              value={q.ans[1]}
-              control={<Radio color="secondary" />}
+              control={<Radio value={`${q.score[1]}`} color="secondary" />}
               label={<p className={classes.Text}>{q.ans[1]}</p>}
               labelPlacement="bottom"
             />
@@ -114,9 +130,33 @@ export default function Information() {
       </RadioGroup>
     </Card>
   ));
+
+  function submitData() {
+    if (Object.keys(userData).length === 8) {
+      setActiveStep(activeStep + 1);
+      setFinalData(userData);
+      setUserData("");
+    } else {
+      setOpen(true);
+      setInterval(() => {
+        setOpen(false);
+      }, 2500);
+    }
+  }
   return (
     <Fragment>
       <div className={classes.root}>
+        <Collapse in={open}>
+          <Alert
+            severity="error"
+            style={{ position: "relative", fontFamily: "Kanit" }}
+          >
+            <AlertTitle style={{ fontFamily: "Kanit" }}>
+              ตอบคำถามไม่ครบ
+            </AlertTitle>
+            กรุณาตอบคำถามให้ครบ
+          </Alert>
+        </Collapse>
         <FadeIn>
           <Grid container justify="center">
             {quiz}

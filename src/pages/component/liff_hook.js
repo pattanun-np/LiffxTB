@@ -43,6 +43,7 @@ function useLiff({ liffId }) {
       setLoading(false);
     }
   };
+
   const closeLiff = () => {
     liff.closeWindow();
   };
