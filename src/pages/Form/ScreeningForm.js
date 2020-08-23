@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
-
+import { StoreContext } from "../Context/store";
+import FadeIn from "react-fade-in";
 import {
   Grid,
   makeStyles,
@@ -7,6 +8,8 @@ import {
   RadioGroup,
   Radio,
   Card,
+  Box,
+  Button,
   FormControlLabel,
   FormControl,
 } from "@material-ui/core/";
@@ -25,13 +28,46 @@ const useStyles = makeStyles({
     position: "relative",
     width: "200px",
   },
+  ButtonBack: {
+    background:
+      "linear-gradient( 100.6deg,  rgba(0,200,180,1) 11.2%, rgba(0,140,255,1) 91.1% )",
+    fontFamily: "Kanit",
+    boxShadow: "0 3px 5px 2px rgba(0, 100, 255, .3)",
+    color: "white",
+    width: "140px",
+    borderRadius: 50,
+    padding: 5,
+    margin: "15px",
+  },
+  ButtonNext: {
+    background:
+      "linear-gradient( 200.6deg,  rgba(255,207,84,1) 11.2%, rgba(255,158,27,1) 91.1% )",
+
+    fontFamily: "Kanit",
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    width: "140px",
+    borderRadius: 50,
+    padding: 5,
+    margin: "15px",
+  },
+  quiz: {
+    background:
+      "linear-gradient( 268deg,  rgba(255,105,180,1) 4.1%, rgba(255,174,215,1) 74.3% )",
+    fontFamily: "Kanit",
+    color: "white",
+    width: "90px",
+    borderRadius: 50,
+    padding: 5,
+    margin: "2px",
+  },
   Card: {
     fontFamily: "Kanit",
     margin: "5px",
     padding: "10px",
-    maxWidth: "600px",
-    width: "850px",
-    height: "150px",
+    maxWidth: "870px",
+    width: "870px",
+    height: "auto",
     boxShadow: "0 3px 5px 2px rgba(10, 10,10, 0.1)",
     borderRadius: 10,
   },
@@ -42,20 +78,24 @@ const useStyles = makeStyles({
 
 export default function Information() {
   const classes = useStyles();
+  const {
+    activeStep,
+    setActiveStep,
+
+    submitData,
+  } = React.useContext(StoreContext);
   const quiz = question.map((q) => (
     <Card className={classes.Card} key={q.id}>
-      <Typography className={classes.Text}>
-        คำถามที่:{q.id} {q.question}{" "}
-      </Typography>
-
+      <h1 className={classes.quiz}>คำถามที่ : {q.id}</h1>
+      <Typography className={classes.Text}>{q.question} </Typography>
       <RadioGroup row aria-label="position" name="position" defaultValue="top">
         <Grid item xs={6}>
           <FormControl component="fieldset" className={classes.Text}>
             <FormControlLabel
               className={classes.Text}
               value={q.ans[0]}
-              control={<Radio color="primary" />}
-              label={q.ans[0]}
+              control={<Radio color="secondary" />}
+              label={<p className={classes.Text}>{q.ans[0]}</p>}
               labelPlacement="bottom"
             />
           </FormControl>
@@ -65,8 +105,8 @@ export default function Information() {
             <FormControlLabel
               className={classes.Text}
               value={q.ans[1]}
-              control={<Radio color="primary" />}
-              label={q.ans[1]}
+              control={<Radio color="secondary" />}
+              label={<p className={classes.Text}>{q.ans[1]}</p>}
               labelPlacement="bottom"
             />
           </FormControl>
@@ -77,11 +117,31 @@ export default function Information() {
   return (
     <Fragment>
       <div className={classes.root}>
-        {/* <p>#Debug {JSON.stringify(userAge)}</p> */}
-
-        <Grid container justify="center">
-          {quiz}
-        </Grid>
+        <FadeIn>
+          <Grid container justify="center">
+            {quiz}
+          </Grid>
+          <Box display="flex" justifyContent="center">
+            <Button
+              variant="contained"
+              className={classes.ButtonNext}
+              onClick={submitData}
+            >
+              ส่ง &nbsp;
+              <i class="fas fa-paper-plane"></i>
+            </Button>
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <Button
+              variant="contained"
+              className={classes.ButtonBack}
+              onClick={() => setActiveStep(activeStep - 1)}
+            >
+              ย้อนกลับ &nbsp;
+              <i class="fas fa-arrow-left"></i>
+            </Button>
+          </Box>
+        </FadeIn>
       </div>
     </Fragment>
   );

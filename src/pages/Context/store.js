@@ -1,17 +1,29 @@
 import React from "react";
+import FormMain from "../Form/FormMain";
 
 export const StoreContext = React.createContext({});
-
-export const StoreContextProvider = ({ children }) => {
-  const [gender, setGender] = React.useState("ระบุเพศ");
-  const [age, setAge] = React.useState("");
-
-  const store = {
-    gender: [gender, setGender],
-    age: [age, setAge],
-  };
-  console.log(store);
+export const StepContext = () => {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [userData, setUserData] = React.useState([]);
+  const [finalData, setFinalData] = React.useState([]);
+  function submitData() {
+    setActiveStep(activeStep + 1);
+    setFinalData((finalData) => [...finalData, userData]);
+    setUserData("");
+  }
   return (
-    <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+    <StoreContext.Provider
+      value={{
+        activeStep,
+        setActiveStep,
+        userData,
+        setUserData,
+        finalData,
+        setFinalData,
+        submitData,
+      }}
+    >
+      <FormMain />
+    </StoreContext.Provider>
   );
 };

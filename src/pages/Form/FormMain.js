@@ -1,7 +1,8 @@
 import React from "react";
-import * as yup from "yup";
+
 import {
   makeStyles,
+  withStyles,
   Step,
   Stepper,
   StepLabel,
@@ -10,17 +11,74 @@ import {
   Grid,
   Box,
   Card,
+  StepConnector,
 } from "@material-ui/core/";
 
-import { useForm } from "react-hook-form";
+import PropTypes from "prop-types";
+import clsx from "clsx";
 import swal from "sweetalert";
 import Gender from "./Gender";
 import Age from "./Age";
+import FadeIn from "react-fade-in";
 import Screening from "./ScreeningForm";
 import HomeIcon from "@material-ui/icons/Home";
-import useLiff from "../component/liff_hook";
+import WcIcon from "@material-ui/icons/Wc";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AssignmentOutlinedIcon from "@material-ui/icons/AssignmentOutlined";
 import { StoreContext } from "../Context/store";
+import useLiff from "../component/liff_hook";
 const liffId = "1654260546-VwqZxy4o";
+
+const ColorlibConnector = withStyles({
+  alternativeLabel: {
+    top: 22,
+    fontFamily: "Kanit",
+  },
+  active: {
+    "& $line": {
+      backgroundImage:
+        "linear-gradient( 100.6deg,  rgba(0,200,180,1) 11.2%, rgba(0,140,255,1) 91.1% )",
+    },
+  },
+  completed: {
+    "& $line": {
+      backgroundImage:
+        "linear-gradient( 100.6deg,  rgba(0,200,180,1) 11.2%, rgba(0,140,255,1) 91.1% )",
+    },
+  },
+  line: {
+    height: 6,
+    border: 0,
+    backgroundColor: "#eaeaf0",
+    borderRadius: 1,
+  },
+})(StepConnector);
+
+const useColorlibStepIconStyles = makeStyles({
+  root: {
+    backgroundColor: "#ccc",
+    zIndex: 1,
+    color: "#fff",
+    width: 50,
+    height: 50,
+    display: "flex",
+    borderRadius: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+
+    fontFamily: "Kanit",
+  },
+  active: {
+    backgroundImage:
+      "linear-gradient( 100.6deg,  rgba(0,200,180,1) 11.2%, rgba(0,140,255,1) 91.1% )",
+    boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)",
+  },
+  completed: {
+    backgroundImage:
+      "linear-gradient( 100.6deg,  rgba(0,200,180,1) 11.2%, rgba(0,140,255,1) 91.1% )",
+  },
+});
+
 const useStyles = makeStyles({
   root: {
     minWidth: "320px",
@@ -29,6 +87,7 @@ const useStyles = makeStyles({
     height: "auto",
     justifyContent: "center",
   },
+
   CardGroup: {
     color: "white",
     backgroundColor: "white",
@@ -70,7 +129,6 @@ const useStyles = makeStyles({
   ButtonBack: {
     background:
       "linear-gradient( 100.6deg,  rgba(0,200,180,1) 11.2%, rgba(0,140,255,1) 91.1% )",
-
     fontFamily: "Kanit",
     boxShadow: "0 3px 5px 2px rgba(0, 100, 255, .3)",
     color: "white",
@@ -106,51 +164,48 @@ const useStyles = makeStyles({
     color: "#eaeaf0",
   },
 });
-function getSteps() {
-  return ["ข้อมูลเพศ", "ข้อมูลอายุ", "แบบคัดกรอง"];
-}
-const genderSchema = yup.object().shape({
-  gender: yup.string().required("กรุณาระบุเพศ"),
-});
-const ageSchema = yup.object().shape({
-  age: yup.number().required("กรุณากรอกอายุ").positive().integer(),
-});
+function ColorlibStepIcon(props) {
+  const classes = useColorlibStepIconStyles();
+  const { active, completed } = props;
 
+  const icons = {
+    1: <AccountCircleIcon />,
+    2: <WcIcon />,
+    3: <AssignmentOutlinedIcon />,
+  };
+
+  return (
+    <div
+      className={clsx(classes.root, {
+        [classes.active]: active,
+        [classes.completed]: completed,
+      })}
+    >
+      {icons[String(props.icon)]}
+    </div>
+  );
+}
+
+ColorlibStepIcon.propTypes = {
+  /**
+   * Whether this step is active.
+   */
+  active: PropTypes.bool,
+  /**
+   * Mark the step as completed. Is passed to child components.
+   */
+  completed: PropTypes.bool,
+  /**
+   * The label displayed in the step icon.
+   */
+  icon: PropTypes.node,
+};
 export default function FormMain() {
   const classes = useStyles();
-  const { gender, age } = React.useContext(StoreContext);
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set());
   const { closeLiff } = useLiff({
     liffId,
   });
-  const genderForm = useForm({
-    validationSchema: genderSchema,
-  });
-
-  const ageForm = useForm({
-    validationSchema: ageSchema,
-  });
-  const steps = getSteps();
-
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
-
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  const { activeStep, userData, finalData } = React.useContext(StoreContext);
 
   const handleConfrim = () => {
     swal({
@@ -166,30 +221,17 @@ export default function FormMain() {
       }
     });
   };
-
-  const onSubmit = (data) => {
-    data.preventDefault();
-    console.log(data);
-    if (activeStep === 0) {
-      gender[1](data);
-    } else if (activeStep === 1) {
-      age[1](data);
-    }
-    handleNext();
-  };
-  function sendValidation() {
-    if (activeStep === 0) {
-      genderForm.handleSubmit(onSubmit);
-    } else if (activeStep === 1) {
-      ageForm.handleSubmit(onSubmit);
-    }
+  function getStep() {
+    return ["ข้อมูลอายุ", "ข้อมูลเพศ", "แบบคัดกรอง"];
   }
+
+  const step = getStep();
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <Gender formProps={genderForm} data={gender} />;
+        return <Age />;
       case 1:
-        return <Age formProps={ageForm} data={age} />;
+        return <Gender />;
       case 2:
         return <Screening />;
       default:
@@ -199,91 +241,77 @@ export default function FormMain() {
 
   return (
     <div className={classes.root}>
+      <Button onClick={() => closeLiff()} className={classes.Button}>
+        <i
+          class="fas fa-times-circle"
+          style={{
+            marginRight: "5px",
+          }}
+        ></i>{" "}
+        ปิด
+      </Button>
+      <p>DebugData{JSON.stringify(userData)}</p>
+      <p>DebugFinal{JSON.stringify(finalData)}</p>
       <Grid container justify="center">
         <Button
-          disable={activeStep === steps.length ? false : true}
-          startIcon={activeStep === steps.length ? "" : <HomeIcon />}
-          className={activeStep === steps.length ? "" : classes.ButtonHome}
-          onClick={activeStep === steps.length ? "" : handleConfrim}
+          disable={activeStep === step.length ? false : true}
+          startIcon={activeStep === step.length ? "" : <HomeIcon />}
+          className={activeStep === step.length ? "" : classes.ButtonHome}
+          onClick={activeStep === step.length ? "" : handleConfrim}
         >
-          {activeStep === steps.length ? "" : "ยกเลิก"}
+          {activeStep === step.length ? "" : "กลับ"}
         </Button>
       </Grid>
-      <form onSubmit={sendValidation}>
-        <Stepper activeStep={activeStep} alternativeLabel>
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
+      <Stepper
+        activeStep={activeStep}
+        alternativeLabel
+        connector={<ColorlibConnector />}
+      >
+        {step.map((label, index) => {
+          const stepProps = {};
+          const labelProps = {};
 
-            if (isStepSkipped(index)) {
-              stepProps.completed = false;
-            }
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
+          return (
+            <Step key={index} {...stepProps}>
+              <StepLabel {...labelProps} StepIconComponent={ColorlibStepIcon}>
+                <p style={{ fontFamily: "Kanit" }}>{label}</p>
+              </StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
+
+      {activeStep === step.length ? (
         <div>
-          {activeStep === steps.length ? (
-            <div>
-              <Box display="flex" justifyContent="center">
-                <Typography className={classes.instructions} justify="center">
-                  ตอบแบบคัดกรองเสร็จสิ้น
-                </Typography>
-              </Box>
-              <Box display="flex" justifyContent="center">
-                <Card className={classes.Card}>
-                  <Box justifyContent="flexEnd">
-                    <Button
-                      className={classes.Button}
-                      onClick={() => {
-                        closeLiff();
-                      }}
-                    >
-                      ปิด
-                    </Button>
-                  </Box>
-                  <Box display="flex" justifyContent="center">
-                    <Typography className={classes.instructions}>
-                      ผลการคัดกรอง
-                    </Typography>
-                  </Box>
-                </Card>
-              </Box>
-            </div>
-          ) : (
-            <div>
-              <Typography className={classes.instructions}>
-                {getStepContent(activeStep)}
-              </Typography>
-              <Box display="flex" justifyContent="center">
-                <Button
-                  variant="contained"
-                  className={classes.ButtonNext}
-                  type="button"
-                >
-                  {activeStep === steps.length - 1 ? "ส่งแบบคัดกรอง" : "ถัดไป"}
-                  &nbsp;
-                  <i class="fas fa-arrow-right"></i>
-                </Button>
-              </Box>
-              <div>
+          <Box display="flex" justifyContent="center">
+            <FadeIn>
+              <Card className={classes.Card}>
                 <Box display="flex" justifyContent="center">
-                  <Button
-                    className={classes.ButtonBack}
-                    onClick={handleBack}
-                    disabled={activeStep === 0 ? true : false}
-                  >
-                    <i class="fas fa-arrow-left"></i>&nbsp; ย้อนกลับ
-                  </Button>
+                  <Typography className={classes.instructions}>
+                    ตอบแบบคัดกรองเสร็จสิ้น
+                  </Typography>
                 </Box>
-              </div>
-            </div>
-          )}
+              </Card>
+            </FadeIn>
+          </Box>
         </div>
-      </form>
+      ) : (
+        <div>
+          <FadeIn>
+            <div> {getStepContent(activeStep)}</div>
+            <Box display="flex" justifyContent="center">
+              <Typography>
+                <a
+                  href="https://github.com/pattanunNP"
+                  style={{ fontSize: "10px" }}
+                >
+                  Copyright © 2020 All Right Revesed By pattanunNP
+                </a>
+              </Typography>
+            </Box>
+          </FadeIn>
+        </div>
+      )}
     </div>
   );
 }

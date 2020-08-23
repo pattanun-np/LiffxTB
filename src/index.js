@@ -4,13 +4,10 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { AppContainer } from "react-hot-loader";
-import { StoreContextProvider } from "./pages/Context/store";
 
 ReactDOM.render(
   <AppContainer>
-    <StoreContextProvider>
-      <App />
-    </StoreContextProvider>
+    <App />
   </AppContainer>,
   document.getElementById("root")
 );

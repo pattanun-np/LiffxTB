@@ -10,15 +10,18 @@ import {
   CircularProgress,
 } from "@material-ui/core/";
 import { Link } from "react-router-dom";
+import FadeIn from "react-fade-in";
 import useLiff from "../component/liff_hook";
-
 const liffId = "1654260546-VwqZxy4o";
 
 const useStyles = makeStyles({
   root: {
+    margin: "10px",
+    justsifyContent: "center",
     minWidth: "320px",
     minHeight: "680px",
     fontFamily: "Kanit",
+    borderRadius: "20px",
   },
   CardBtn: {
     justsify: "center",
@@ -63,6 +66,18 @@ const useStyles = makeStyles({
     padding: 5,
     width: "150px",
   },
+  Buttondashboard: {
+    marginTop: "24px",
+    background:
+      "radial-gradient( circle 465px at -15.1% -25%,  rgba(17,130,193,1) 0%, rgba(67,166,238,1) 49%, rgba(126,203,244,1) 90.2% )",
+
+    fontFamily: "Kanit",
+    borderRadius: 50,
+    boxShadow: "0 3px 5px 2px rgba(17,130,193,0.4)",
+    color: "white",
+    height: "64px",
+    width: "256px",
+  },
   text: {
     marginTop: 10,
     fontFamily: "Kanit",
@@ -96,50 +111,69 @@ export default function FormHome() {
             </Box>
           ) : (
             <div>
-              {profile && (
-                <Box display="flex" justifyContent="center">
-                  <div
-                    style={{
-                      padding: "5px",
-                      borderRadius: "100%",
-                      background:
-                        "radial-gradient( circle 465px at -15.1% -25%,  rgba(17,130,193,1) 0%, rgba(67,166,238,1) 49%, rgba(126,203,244,1) 90.2% )",
-                    }}
-                  >
-                    <Avatar
-                      alt={profile.displayName}
-                      src={profile.pictureUrl}
-                      {...defaultProps}
-                    />
-                  </div>
-                </Box>
-              )}
-              {profile && (
-                <Box display="flex" justifyContent="center">
-                  <Typography className={classes.text}>
-                    สวัสดีครับคุณ&nbsp;
-                    {profile.displayName}
-                  </Typography>
-                </Box>
-              )}
+              <FadeIn>
+                {profile && (
+                  <Box display="flex" justifyContent="center">
+                    <div
+                      style={{
+                        padding: "5px",
+                        borderRadius: "100%",
+                      }}
+                    >
+                      <Avatar
+                        alt={profile.displayName}
+                        src={profile.pictureUrl}
+                        {...defaultProps}
+                      />
+                    </div>
+                  </Box>
+                )}
+                {profile && (
+                  <Box display="flex" justifyContent="center">
+                    <Typography className={classes.text}>
+                      สวัสดีครับคุณ&nbsp;
+                      {profile.displayName}
+                    </Typography>
+                  </Box>
+                )}
+              </FadeIn>
             </div>
           )}
         </CardContent>
-        <Box display="flex" justifyContent="center">
-          <Button size="large" className={classes.Button}>
-            <Link to="/form" style={{ color: "white" }}>
-              <i className="fas fa-notes-medical"></i>&nbsp;
-              ตอบแบบคัดกรองวัณโรคปอด
-            </Link>
-          </Button>
-        </Box>
-        <Box display="flex" justifyContent="center">
-          <Button size="large" className={classes.Button3}>
-            <Link to="/guide" style={{ color: "white" }}>
-              <i className="fas fa-question-circle"></i>&nbsp; คำแนะนำ
-            </Link>
-          </Button>
-        </Box>
+        <FadeIn>
+          <Box display="flex" justifyContent="center">
+            <Button size="large" className={classes.Button}>
+              <Link to="/form" style={{ color: "white" }}>
+                <i className="fas fa-notes-medical"></i>&nbsp;
+                ตอบแบบคัดกรองวัณโรคปอด
+              </Link>
+            </Button>
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <Button size="large" className={classes.Button3}>
+              <Link to="/guide" style={{ color: "white" }}>
+                <i className="fas fa-question-circle"></i>&nbsp; คำแนะนำ
+              </Link>
+            </Button>
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <Button size="large" className={classes.Buttondashboard}>
+              <Link to="/dashboard" style={{ color: "white" }}>
+                <i class="fas fa-tachometer-alt"></i>&nbsp; dashboard
+              </Link>
+            </Button>
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <Typography>
+              <a
+                href="https://github.com/pattanunNP"
+                style={{ fontSize: "10px" }}
+              >
+                Copyright © 2020 All Right Revesed By pattanunNP
+              </a>
+            </Typography>
+          </Box>
+        </FadeIn>
       </Card>
     </div>
   );

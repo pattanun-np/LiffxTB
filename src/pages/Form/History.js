@@ -10,14 +10,17 @@ import {
   Paper,
   Grid,
   TableRow,
+  Button,
   Typography,
 } from "@material-ui/core/";
-
+import HomeIcon from "@material-ui/icons/Home";
+import swal from "sweetalert";
 const useStyles = makeStyles({
   root: {
     minWidth: "320px",
     fontFamily: "Kanit",
     height: "800px",
+    padding: "15px",
   },
 
   container: {
@@ -35,6 +38,30 @@ const useStyles = makeStyles({
     fontFamily: "Kanit",
     fontWeight: 300,
     fontStyle: "Bold",
+  },
+  ButtonHome: {
+    background:
+      "linear-gradient( 200.6deg,  rgba(25,207,10,1) 11.2%, rgba(25,158,100,1) 91.1% )",
+
+    fontFamily: "Kanit",
+    boxShadow: "0 3px 5px 2px rgba(50,233,22,0.6))",
+    color: "white",
+    width: "128px",
+    borderRadius: 50,
+    padding: 5,
+    margin: "15px",
+  },
+  ButtonLoad: {
+    background:
+      "linear-gradient( 200.6deg,  rgba(25,207,10,1) 11.2%, rgba(25,158,100,1) 91.1% )",
+
+    fontFamily: "Kanit",
+    boxShadow: "0 3px 5px 2px rgba(50,233,22,0.6))",
+    color: "white",
+    width: "180px",
+    borderRadius: 50,
+    padding: 5,
+    margin: "15px",
   },
 });
 const columns = [
@@ -54,15 +81,29 @@ const columns = [
     align: "right",
     format: (value) => value.toLocaleString("en-US"),
   },
+  {
+    id: "Result",
+    label: "ผลการคัดกรอง",
+    minWidth: 170,
+    align: "right",
+    format: (value) => value.toLocaleString("en-US"),
+  },
 ];
 
-function createData(Date, UniqCode, Gender, Score) {
-  return { Date, UniqCode, Gender, Score };
+function createData(Date, UniqCode, Gender, Score, Result) {
+  return { Date, UniqCode, Gender, Score, Result };
 }
 
 const rows = [
-  createData("01/05/2020", "214wq", "หญิง", 2),
-  createData("01/08/2020", "463wr", "หญิง", 0),
+  createData("01/05/2020", "214wq", "หญิง", 3, "เสี่ยง"),
+  createData("01/08/2020", "463wr", "ชาย", 0, "ไม่เสียง"),
+  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
+  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
+  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
+  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
+  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
+  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
+  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
 ];
 
 export default function StepperForm() {
@@ -79,9 +120,29 @@ export default function StepperForm() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
+  const handleConfrim = () => {
+    swal({
+      title: "คุณกำลังจะกลับไปหน้าหลัก ?",
+      text: "",
+      icon: "info",
+      buttons: ["ยกเลิก", "ตกลง"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        window.location = "/";
+      } else {
+      }
+    });
+  };
   return (
     <Paper className={classes.root}>
+      <Button
+        startIcon={<HomeIcon />}
+        className={classes.ButtonHome}
+        onClick={handleConfrim}
+      >
+        กลับ
+      </Button>
       <Grid container justify="center">
         <Typography style={{ fontFamily: "Kanit" }}>
           ประวัติการคัดกรอง
@@ -151,6 +212,18 @@ export default function StepperForm() {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
+      <Button
+        startIcon={
+          <img
+            width="50px"
+            alt="to_csv"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/.csv_icon.svg/768px-.csv_icon.svg.png"
+          />
+        }
+        className={classes.ButtonLoad}
+      >
+        Download to CSV File
+      </Button>
     </Paper>
   );
 }
