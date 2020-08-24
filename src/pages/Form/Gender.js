@@ -221,7 +221,7 @@ export default function Gender() {
                 typeof userData["Gender"] === "undefined" ? true : false
               }
               className={classes.ButtonNext}
-              onClick={(e) => setActiveStep(activeStep + 1)}
+              onClick={next}
             >
               ถัดไป &nbsp;
               <i class="fas fa-arrow-right"></i>
@@ -231,7 +231,7 @@ export default function Gender() {
             <Button
               variant="contained"
               className={classes.ButtonBack}
-              onClick={next}
+              onClick={(e) => setActiveStep(activeStep - 1)}
             >
               ย้อนกลับ &nbsp;
               <i class="fas fa-arrow-left"></i>
