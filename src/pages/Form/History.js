@@ -46,7 +46,7 @@ const useStyles = makeStyles({
     fontFamily: "Kanit",
     boxShadow: "0 3px 5px 2px rgba(50,233,22,0.6))",
     color: "white",
-    width: "128px",
+    
     borderRadius: 50,
     padding: 5,
     margin: "15px",
@@ -57,6 +57,7 @@ const useStyles = makeStyles({
     fontFamily: "Kanit",
     boxShadow: "0 3px 5px 2px rgba(50,233,22,0.6))",
     color: "white",
+    width: "128px",
     borderRadius: 50,
     padding: 5,
     
@@ -210,10 +211,10 @@ export default function StepperForm() {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      <Button style={{hight:"50px",width:"100px"}}
+      <Button
         startIcon={
           <img
-            width="50px"
+            width="15px"
             hight="15px"
             alt="to_csv"
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/.csv_icon.svg/768px-.csv_icon.svg.png"
