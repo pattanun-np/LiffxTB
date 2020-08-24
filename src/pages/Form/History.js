@@ -54,14 +54,12 @@ const useStyles = makeStyles({
   ButtonLoad: {
     background:
       "linear-gradient( 200.6deg,  rgba(25,207,10,1) 11.2%, rgba(25,158,100,1) 91.1% )",
-
     fontFamily: "Kanit",
     boxShadow: "0 3px 5px 2px rgba(50,233,22,0.6))",
     color: "white",
-    width: "180px",
     borderRadius: 50,
     padding: 5,
-    margin: "15px",
+    
   },
 });
 const columns = [
@@ -216,7 +214,7 @@ export default function StepperForm() {
         startIcon={
           <img
             width="50px"
-            hight="35px"
+            hight="15px"
             alt="to_csv"
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/.csv_icon.svg/768px-.csv_icon.svg.png"
           />
