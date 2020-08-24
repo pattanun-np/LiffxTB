@@ -216,6 +216,7 @@ export default function StepperForm() {
         startIcon={
           <img
             width="50px"
+            hight="35px"
             alt="to_csv"
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/.csv_icon.svg/768px-.csv_icon.svg.png"
           />
