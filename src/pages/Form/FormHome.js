@@ -118,6 +118,7 @@ export default function FormHome() {
                       style={{
                         padding: "5px",
                         borderRadius: "100%",
+                 boxShadow: "0 3px 5px 2px rgba(17,130,193,0.4)",
                       }}
                     >
                       <Avatar
