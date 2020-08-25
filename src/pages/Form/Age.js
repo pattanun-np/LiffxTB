@@ -69,7 +69,7 @@ export default function Age() {
       userData["Age"] > 0 &&
       userData["Age"].length > 0 &&
       userData["Age"].length <= 3 &&
-      userData["Age"] <= 100
+      userData["Age"] <= 120
     ) {
       setActiveStep(activeStep + 1);
     } else {
