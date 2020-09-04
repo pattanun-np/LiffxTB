@@ -64,7 +64,7 @@ export default function Age() {
     StoreContext
   );
   function next() {
-    console.log(userData["Age"].length);
+    // console.log(userData["Age"].length);
     if (
       userData["Age"] > 0 &&
       userData["Age"].length > 0 &&

@@ -7,14 +7,19 @@ import {
   Stepper,
   StepLabel,
   Typography,
+  Avatar,
   Button,
   Grid,
+  CardHeader,
   Box,
   Card,
   StepConnector,
+  CardContent,
 } from "@material-ui/core/";
 import Lottie from "react-lottie";
+import recoment from "./Recomment";
 import * as loadingData from "../component/Loading/loading.json";
+import * as healthy from "../component/Loading/healthy.json";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import swal from "sweetalert";
@@ -33,6 +38,14 @@ const defaultOptions = {
   loop: true,
   autoplay: true,
   animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+const defaultOptions2 = {
+  loop: true,
+  autoplay: true,
+  animationData: healthy.default,
   rendererSettings: {
     preserveAspectRatio: "xMidYMid slice",
   },
@@ -112,10 +125,10 @@ const useStyles = makeStyles({
   },
   Card: {
     margin: "5px",
-    maxWidth: "480px",
-    width: "450px",
-    height: "280px",
-    padding: "10px",
+    maxWidth: "550px",
+    width: "380px",
+    height: "auto",
+    padding: "1rem",
     boxShadow: "0 3px 5px 2px rgba(10, 10,10, 0.1)",
     borderRadius: 25,
   },
@@ -171,6 +184,28 @@ const useStyles = makeStyles({
   Step: {
     color: "#eaeaf0",
   },
+  CardBtnNomal: {
+    padding: "2px",
+    margin: "5px",
+    maxWidth: "480px",
+    width: "150px",
+    height: "185px",
+    boxShadow: "0px 3px 5px 2px rgba(50, 250,0, 0.5)",
+    borderRadius: 25,
+    marginBottom: "5px",
+    background: "rgba(128, 255, 128, 0.5)",
+  },
+  CardBtnRisk: {
+    padding: "2px",
+    margin: "5px",
+    maxWidth: "480px",
+    width: "150px",
+    height: "185px",
+    boxShadow: "0px 3px 5px 2px rgba(200, 00,00, 0.5)",
+    borderRadius: 25,
+    marginBottom: "5px",
+    background: "rgba(255, 102, 102, 0.5)",
+  },
 });
 function ColorlibStepIcon(props) {
   const classes = useColorlibStepIconStyles();
@@ -195,17 +230,10 @@ function ColorlibStepIcon(props) {
 }
 
 ColorlibStepIcon.propTypes = {
-  /**
-   * Whether this step is active.
-   */
   active: PropTypes.bool,
-  /**
-   * Mark the step as completed. Is passed to child components.
-   */
+
   completed: PropTypes.bool,
-  /**
-   * The label displayed in the step icon.
-   */
+
   icon: PropTypes.node,
 };
 export default function FormMain() {
@@ -214,9 +242,7 @@ export default function FormMain() {
   const { closeLiff, profile } = useLiff({
     liffId,
   });
-  const { activeStep, userData, finalData, sumscore } = React.useContext(
-    StoreContext
-  );
+  const { activeStep, finalData } = React.useContext(StoreContext);
 
   const handleConfrim = () => {
     swal({
@@ -250,9 +276,7 @@ export default function FormMain() {
     }
   }
 
-  console.log(`DebugData ${JSON.stringify(userData)}`);
-  console.log(`DebugData ${JSON.stringify(sumscore)}`);
-  console.log(`DebugFinal ${JSON.stringify(finalData)}`);
+  // console.log(`DebugFinal ${JSON.stringify(finalData)}`);
   setInterval(() => {
     setLoading(false);
   }, 2000);
@@ -303,11 +327,6 @@ export default function FormMain() {
             <FadeIn>
               <Card className={classes.Card}>
                 <Box display="flex" justifyContent="center">
-                  <Typography className={classes.instructions}>
-                    ตอบแบบคัดกรองเสร็จสิ้น
-                  </Typography>
-                </Box>
-                <Box display="flex" justifyContent="center">
                   {loading ? (
                     <Lottie options={defaultOptions} height={140} width={140} />
                   ) : (
@@ -320,20 +339,152 @@ export default function FormMain() {
                         />
                       ) : (
                         <div>
+                          <Box display="flex" justifyContent="center">
+                            <Typography
+                              className={classes.text}
+                              style={{ fontFamily: "Kanit", fontSize: "20px" }}
+                            >
+                              ผลการคัดกรอง<br></br>
+                            </Typography>
+                          </Box>
                           {profile && (
                             <Box display="flex" justifyContent="center">
-                              <Typography className={classes.text}>
-                                รหัสอ้างอิงผู้ใช้<br></br>
-                                {profile.userId}
+                              <div>
+                                <Avatar
+                                  style={{ width: "100px", height: "100px" }}
+                                  alt={profile.displayName}
+                                  src={profile.pictureUrl}
+                                />
+                              </div>
+                            </Box>
+                          )}
+                          {profile && (
+                            <Box display="flex" justifyContent="center">
+                              <Typography
+                                className={classes.text}
+                                style={{
+                                  fontFamily: "Kanit",
+                                  fontSize: "15px",
+                                }}
+                              >
+                                {profile.displayName}
                               </Typography>
                             </Box>
                           )}
+
+                          <Box display="flex" justifyContent="center">
+                            <Card
+                              className={
+                                finalData.Score >= 3
+                                  ? classes.CardBtnRisk
+                                  : classes.CardBtnNomal
+                              }
+                            >
+                              <CardHeader>ผลรวมคะแนน</CardHeader>
+                              <CardContent>
+                                <Box display="flex" justifyContent="center">
+                                  <header
+                                    style={{
+                                      fontFamily: "Kanit",
+                                      fontSize: "35px",
+                                    }}
+                                  >
+                                    {finalData.Score}
+                                  </header>
+                                </Box>
+
+                                <Box display="flex" justifyContent="center">
+                                  <header
+                                    style={{
+                                      fontFamily: "Kanit",
+                                      fontSize: "25px",
+                                    }}
+                                  >
+                                    คะแนน
+                                  </header>
+                                </Box>
+                              </CardContent>
+                            </Card>
+                          </Box>
+                          <Box display="flex" justifyContent="center">
+                            <header
+                              style={{
+                                fontFamily: "Kanit",
+                                fontSize: "15px",
+                                marginTop: "15px",
+                                marginBottom: "15px",
+                                color:
+                                  finalData.Score >= 3 ? "#ff1a1a" : "#00e64d",
+                              }}
+                            >
+                              {finalData.Score >= 3 ? (
+                                <div>
+                                  คุณเสี่ยงที่จะเป็นวัณโรคปอดครับ<br></br>
+                                  โปรดทำตามคำแนะนำด้านล่าง
+                                </div>
+                              ) : (
+                                "ยินดีด้วยครับ! คุณสุขภาพปกติครับ"
+                              )}
+                            </header>
+                          </Box>
                         </div>
                       )}
                     </Box>
                   )}
                 </Box>
               </Card>
+              <Box display="flex" justifyContent="center">
+                <Card className={classes.Card}>
+                  {finalData.Score >= 3 ? (
+                    <Box display="flex" justifyContent="center">
+                      <Grid container>
+                        {recoment.map((n) => (
+                          <Grid item xs={12} key={n.id}>
+                            <Card
+                              style={{
+                                fontFamily: "Kanit",
+                                padding: "10px",
+                                marginTop: "5px",
+                                width: "350px",
+                                height: "auto",
+
+                                borderRadius: 10,
+                              }}
+                            >
+                              <Avatar
+                                alt="img"
+                                src={n.img}
+                                style={{
+                                  padding: "10px",
+                                  width: "65px",
+                                  height: "65px",
+                                }}
+                              />
+
+                              <h1
+                                style={{
+                                  fontFamily: "Kanit",
+                                  fontSize: "15px",
+                                }}
+                              >
+                                {n.recomment}
+                              </h1>
+                            </Card>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Box>
+                  ) : (
+                    <Box display="flex" justifyContent="center">
+                      <Lottie
+                        options={defaultOptions2}
+                        height={240}
+                        width={240}
+                      />
+                    </Box>
+                  )}
+                </Card>
+              </Box>
             </FadeIn>
           </Box>
         </div>

@@ -43,7 +43,7 @@ const useStyles = makeStyles({
       "linear-gradient( 200.6deg,  rgba(255,207,84,1) 11.2%, rgba(255,158,27,1) 91.1% )",
 
     fontFamily: "Kanit",
-    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    boxShadow: "0px 3px 5px 2px rgba(255, 105, 135, .3)",
     color: "white",
     width: "140px",
     borderRadius: 50,
@@ -56,7 +56,7 @@ const useStyles = makeStyles({
     maxWidth: "480px",
     width: "150px",
     height: "185px",
-    boxShadow: "0 3px 5px 2px rgba(10, 10,10, 0.1)",
+    boxShadow: "0px 3px 5px 2px rgba(10, 10,10, 0.1)",
     borderRadius: 25,
     marginBottom: "5px",
     "&:hover": {
@@ -79,7 +79,7 @@ export default function Gender() {
     StoreContext
   );
   function next() {
-    console.log(userData["Age"].length);
+    // console.log(userData["Age"].length);
     if (userData["Gender"] === "ชาย" || userData["Gender"] === "หญิง") {
       setActiveStep(activeStep + 1);
     } else {

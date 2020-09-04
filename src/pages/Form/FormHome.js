@@ -114,13 +114,7 @@ export default function FormHome() {
               <FadeIn>
                 {profile && (
                   <Box display="flex" justifyContent="center">
-                    <div
-                      style={{
-                        padding: "5px",
-                        borderRadius: "100%",
-                 boxShadow: "0 3px 5px 2px rgba(17,130,193,0.4)",
-                      }}
-                    >
+                    <div>
                       <Avatar
                         alt={profile.displayName}
                         src={profile.pictureUrl}
@@ -153,17 +147,18 @@ export default function FormHome() {
           <Box display="flex" justifyContent="center">
             <Button size="large" className={classes.Button3}>
               <Link to="/guide" style={{ color: "white" }}>
-                <i className="fas fa-question-circle"></i>&nbsp; คำแนะนำ
+                <i className="fas fa-question-circle"></i>&nbsp;
+                เกี่ยวกับแบบคัดกรองนี้
               </Link>
             </Button>
           </Box>
-          <Box display="flex" justifyContent="center">
+          {/* <Box display="flex" justifyContent="center">
             <Button size="large" className={classes.Buttondashboard}>
               <Link to="/dashboard" style={{ color: "white" }}>
-                <i class="fas fa-tachometer-alt"></i>&nbsp; dashboard
+                <i class="fas fa-tachometer-alt"></i>&nbsp; เฉพาะเจ้าหน้าที่
               </Link>
             </Button>
-          </Box>
+          </Box> */}
           <Box display="flex" justifyContent="center">
             <Typography>
               <a

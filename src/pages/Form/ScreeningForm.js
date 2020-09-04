@@ -17,7 +17,7 @@ import {
 } from "@material-ui/core/";
 import question from "./Question";
 import { Alert, AlertTitle } from "@material-ui/lab";
-
+import swal from "sweetalert";
 const useStyles = makeStyles({
   root: {
     minWidth: "320px",
@@ -113,7 +113,7 @@ export default function Information() {
               className={classes.Text}
               control={<Radio value={`${q.score[0]}`} color="secondary" />}
               label={<p className={classes.Text}>{q.ans[0]}</p>}
-              labelPlacement="bottom"
+              labelPlacement="right"
             />
           </FormControl>
         </Grid>
@@ -123,18 +123,62 @@ export default function Information() {
               className={classes.Text}
               control={<Radio value={`${q.score[1]}`} color="secondary" />}
               label={<p className={classes.Text}>{q.ans[1]}</p>}
-              labelPlacement="bottom"
+              labelPlacement="right"
             />
           </FormControl>
         </Grid>
       </RadioGroup>
     </Card>
   ));
+  function CalculateScore(userData) {
+    var sum = 0;
+    Object.keys(userData).forEach(function (key) {
+      // console.log(key, userData[key]);
+      if (key.startsWith("No")) {
+        // console.log(key, userData[key]);
+        sum += parseInt(userData[key]);
+      }
+    });
+    return sum;
+  }
+  function ExactInfo(userData) {
+    var Info = { Age: "", Gender: "" };
+    Object.keys(userData).forEach(function (key) {
+      if (key === "Age") {
+        // console.log(key, userData[key]);
+        Info["Age"] = userData[key];
+      }
+      if (key === "Gender") {
+        // console.log(key, userData[key]);
+        Info["Gender"] = userData[key];
+      }
+    });
+    return Info;
+  }
+  const handleComplete = () => {
+    swal({
+      title: "ตอบคัดกรองเสร็จสิ้น",
 
+      icon: "success",
+
+      dangerMode: true,
+    });
+  };
   function submitData() {
     if (Object.keys(userData).length === 8) {
       setActiveStep(activeStep + 1);
-      setFinalData(userData);
+      // console.log(
+      //   "Score:",
+      //   CalculateScore(userData),
+      //   "UserInfo:",
+      //   ExactInfo(userData)
+      // );
+      setFinalData({
+        Score: CalculateScore(userData),
+        UserInfo: ExactInfo(userData),
+        UserAnswer: userData,
+      });
+      handleComplete();
       setUserData("");
     } else {
       setOpen(true);
@@ -143,6 +187,21 @@ export default function Information() {
       }, 2500);
     }
   }
+  const handleConfrim = () => {
+    swal({
+      title: "คณต้องการส่งแบบคัดกรอง ?",
+      text: "ผลการตอบแบบคัดกรองของคุณจะถูกบันทึกไว้ในระบบ",
+      icon: "warning",
+      buttons: ["ปิด", "ตกลง"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        submitData();
+      } else {
+      }
+    });
+  };
+
   return (
     <Fragment>
       <div className={classes.root}>
@@ -165,7 +224,7 @@ export default function Information() {
             <Button
               variant="contained"
               className={classes.ButtonNext}
-              onClick={submitData}
+              onClick={handleConfrim}
             >
               ส่ง &nbsp;
               <i class="fas fa-paper-plane"></i>
