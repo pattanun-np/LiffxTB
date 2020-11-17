@@ -9,7 +9,7 @@ const reccomment = [
     id: 2,
     img:
       "https://res.cloudinary.com/image-chatbot/image/upload/v1599243885/nok/glass-of-water_lbcs79.png",
-    recomment: "2. แยกของใช้ส่วนตัวจากผู้อื่น อาทิ แก้วน้ำ จานชามช้อน",
+    recomment: "2. แยกของใช้ส่วนตัวจากผู้อื่น อาทิ แก้วน้ำ จาน ชาม ช้อน",
   },
   {
     id: 3,
