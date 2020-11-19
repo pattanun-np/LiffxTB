@@ -1,15 +1,17 @@
-import React from "react";
-import FormMain from "../Form/FormMain";
+import React, { useState, createContext } from "react";
 
-export const StoreContext = React.createContext({});
-export const StepContext = () => {
-  const [activeStep, setActiveStep] = React.useState(0);
+export const StoreContext = createContext({});
+export const StoreContextProvider = ({ children }) => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [userData, setUserData] = useState("");
 
-  const [userData, setUserData] = React.useState("");
-  const [finalData, setFinalData] = React.useState({
+  const [finalData, setFinalData] = useState({
     UserInfo: "",
     Score: "",
     UserAnswer: "",
+    IsRisk: "",
+    RefCode: "",
+    QrLink: "",
   });
 
   return (
@@ -23,7 +25,7 @@ export const StepContext = () => {
         setFinalData,
       }}
     >
-      <FormMain />
+      {children}
     </StoreContext.Provider>
   );
 };

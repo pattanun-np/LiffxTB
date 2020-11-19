@@ -22,6 +22,7 @@ const useStyles = makeStyles({
     minHeight: "680px",
     fontFamily: "Kanit",
     borderRadius: "20px",
+    padding: "2rem",
   },
   CardBtn: {
     justsify: "center",
@@ -42,7 +43,7 @@ const useStyles = makeStyles({
     width: "256px",
   },
 
-  Button3: {
+  ButtonHome: {
     justsify: "center",
     marginTop: "24px",
     background:
@@ -51,8 +52,8 @@ const useStyles = makeStyles({
     borderRadius: 50,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     color: "white",
-    height: "64px",
-    width: "256px",
+    height: "24px",
+    width: "56px",
   },
   Buttoninfo: {
     background:
@@ -75,7 +76,7 @@ const useStyles = makeStyles({
     borderRadius: 50,
     boxShadow: "0 3px 5px 2px rgba(17,130,193,0.4)",
     color: "white",
-    height: "64px",
+    height: "35px",
     width: "256px",
   },
   text: {

@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, { useContext } from "react";
 import {
   makeStyles,
   withStyles,
@@ -33,7 +32,8 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AssignmentOutlinedIcon from "@material-ui/icons/AssignmentOutlined";
 import { StoreContext } from "../Context/store";
 import useLiff from "../component/liff_hook";
-const liffId = "1654260546-VwqZxy4o";
+import QRCode from "react-qr-code";
+
 const defaultOptions = {
   loop: true,
   autoplay: true,
@@ -125,8 +125,8 @@ const useStyles = makeStyles({
   },
   Card: {
     margin: "5px",
-    maxWidth: "550px",
-    width: "380px",
+    maxWidth: "650px",
+    width: "400px",
     height: "auto",
     padding: "1rem",
     boxShadow: "0 3px 5px 2px rgba(10, 10,10, 0.1)",
@@ -185,26 +185,29 @@ const useStyles = makeStyles({
     color: "#eaeaf0",
   },
   CardBtnNomal: {
+    color: "#FFFFFF",
     padding: "2px",
     margin: "5px",
     maxWidth: "480px",
     width: "150px",
     height: "185px",
-    boxShadow: "0px 3px 5px 2px rgba(50, 250,0, 0.5)",
+    // boxShadow: "0px 3px 5px 2px rgba(50, 250,75, 0.5)",
     borderRadius: 25,
     marginBottom: "5px",
-    background: "rgba(128, 255, 128, 0.5)",
+    backgroundImage:
+      "radial-gradient( circle 961px at 1.9% 5%,  rgba(242,241,36,1) 0%, rgba(11,236,218,1) 90% )",
   },
   CardBtnRisk: {
+    color: "#FFFFFF",
     padding: "2px",
     margin: "5px",
     maxWidth: "480px",
     width: "150px",
     height: "185px",
-    boxShadow: "0px 3px 5px 2px rgba(200, 00,00, 0.5)",
     borderRadius: 25,
     marginBottom: "5px",
-    background: "rgba(255, 102, 102, 0.5)",
+    backgroundImage:
+      "radial-gradient( circle farthest-corner at 3.1% 6.8%,  rgba(199,0,59,1) 0%, rgba(255,88,53,1) 97.7% )",
   },
 });
 function ColorlibStepIcon(props) {
@@ -239,10 +242,9 @@ ColorlibStepIcon.propTypes = {
 export default function FormMain() {
   const classes = useStyles();
   const [loading, setLoading] = React.useState(false);
-  const { closeLiff, profile } = useLiff({
-    liffId,
-  });
-  const { activeStep, finalData } = React.useContext(StoreContext);
+  const liffId = "1654260546-VwqZxy4o";
+  const { userprofile, closeLiff } = useLiff({ liffId });
+  const { activeStep, finalData } = useContext(StoreContext);
 
   const handleConfrim = () => {
     swal({
@@ -277,7 +279,7 @@ export default function FormMain() {
   }
 
   // console.log(`DebugFinal ${JSON.stringify(finalData)}`);
-  setInterval(() => {
+  setTimeout(() => {
     setLoading(false);
   }, 2000);
   return (
@@ -347,18 +349,18 @@ export default function FormMain() {
                               ผลการคัดกรอง<br></br>
                             </Typography>
                           </Box>
-                          {profile && (
+                          {userprofile && (
                             <Box display="flex" justifyContent="center">
                               <div>
                                 <Avatar
                                   style={{ width: "100px", height: "100px" }}
-                                  alt={profile.displayName}
-                                  src={profile.pictureUrl}
+                                  alt={userprofile.displayName}
+                                  src={userprofile.pictureUrl}
                                 />
                               </div>
                             </Box>
                           )}
-                          {profile && (
+                          {userprofile && (
                             <Box display="flex" justifyContent="center">
                               <Typography
                                 className={classes.text}
@@ -367,7 +369,7 @@ export default function FormMain() {
                                   fontSize: "15px",
                                 }}
                               >
-                                {profile.displayName}
+                                {userprofile.displayName}
                               </Typography>
                             </Box>
                           )}
@@ -423,7 +425,7 @@ export default function FormMain() {
                                   โปรดทำตามคำแนะนำด้านล่าง
                                 </div>
                               ) : (
-                                "ยินดีด้วยครับ! คุณสุขภาพปกติครับ"
+                                <div> "ยินดีด้วยครับ! คุณสุขภาพปกติครับ"</div>
                               )}
                             </header>
                           </Box>
@@ -431,6 +433,23 @@ export default function FormMain() {
                       )}
                     </Box>
                   )}
+                </Box>
+                <Box display="flex" justifyContent="center">
+                  <QRCode value={finalData.QrLink} />
+                  {/* {finalData.QrLink} */}
+                </Box>
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  style={{ marginTop: "20px" }}
+                >
+                  <Typography style={{ fontFamily: "Kanit", color: "red" }}>
+                    {" "}
+                    ** กรณีเป็นกลุ่มต้องสงสัย หรือ มีผลรวมคะแนนมากกว่า หรือ
+                    เท่ากับ 3 คะแนน ให้นำ QR Code นี้ ไปแสดงต่อเจ้าหน้าที่ ณ
+                    คลินิกวัณโรคใกล้บ้านท่าน
+                    เพือรับการสิทธิ์ในการตรวจวินิจฉัยแบบด่วนพิเศษ **
+                  </Typography>
                 </Box>
               </Card>
               <Box display="flex" justifyContent="center">
@@ -447,7 +466,6 @@ export default function FormMain() {
                                 marginTop: "5px",
                                 width: "350px",
                                 height: "auto",
-
                                 borderRadius: 10,
                               }}
                             >

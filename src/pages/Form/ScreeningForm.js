@@ -1,7 +1,8 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import { StoreContext } from "../Context/store";
 import FadeIn from "react-fade-in";
-
+import axios from "axios";
+import { useLocation } from "react-router-dom";
 import {
   Grid,
   makeStyles,
@@ -80,16 +81,22 @@ const useStyles = makeStyles({
 });
 
 export default function Information() {
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const {
     activeStep,
     setActiveStep,
     userData,
     setUserData,
     setFinalData,
-  } = React.useContext(StoreContext);
-
+  } = useContext(StoreContext);
+  let query = useQuery();
+  const username = query.get("name");
+  const userId = query.get("userId");
   const quiz = question.map((q) => (
     <Card className={classes.Card} key={q.id}>
       <h1 className={classes.quiz}>คำถามที่ : {q.id}</h1>
@@ -164,20 +171,74 @@ export default function Information() {
       dangerMode: true,
     });
   };
+
+  function CalRisk(score) {
+    let is_risk;
+    if (score >= 3) {
+      is_risk = true;
+      return is_risk;
+    } else {
+      is_risk = false;
+      return is_risk;
+    }
+  }
+  function recordData(userId, user_data) {
+    axios
+      .post(
+        "https://tb-check-report-api.herokuapp.com/api/record?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUGF0dGFudW4gTnVtcG9uZyIsInBhc3N3b3JkIjoic3NyZzgzNCJ9.g-r1MSNdircjhOC98wcaJ1sFg5zaMSupVLW4h68rgnc",
+        {
+          user_id: userId,
+          user_data: user_data,
+        }
+      )
+      .then(
+        (response) => {
+          setTimeout(() => {
+            // setLoading(false);
+            setOpen(true);
+          }, 1000);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+  }
+  function create_UUID() {
+    var dt = new Date().getTime();
+    var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (dt + Math.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+        return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+      }
+    );
+    return uuid;
+  }
   function submitData() {
     if (Object.keys(userData).length === 8) {
       setActiveStep(activeStep + 1);
-      // console.log(
-      //   "Score:",
-      //   CalculateScore(userData),
-      //   "UserInfo:",
-      //   ExactInfo(userData)
-      // );
+      const refcode = create_UUID();
+      const QrLink =
+        "https://tb-check-report-api.herokuapp.com/tracker?refcode=?" + refcode;
       setFinalData({
         Score: CalculateScore(userData),
         UserInfo: ExactInfo(userData),
         UserAnswer: userData,
+        IsRisk: CalRisk(CalculateScore(userData)),
+        RefCode: refcode,
+        QrLink: QrLink,
       });
+
+      const user_data = {
+        name: username,
+        Score: CalculateScore(userData),
+        UserInfo: ExactInfo(userData),
+        IsRisk: CalRisk(CalculateScore(userData)),
+        UserAnswer: userData,
+        RefCode: refcode,
+      };
+      recordData(userId, user_data);
       handleComplete();
       setUserData("");
     } else {

@@ -5,7 +5,7 @@ import FormMain from "./pages/Form/FormMain";
 import History from "./pages/Form/History";
 import Login from "./pages/Form/Login";
 import Guide from "./pages/Form/guide";
-import { StepContext } from "./pages/Context/store";
+import { PrivateRoute } from "./Private/PrivateRoute";
 function App() {
   return (
     <div className="App container">
@@ -14,10 +14,8 @@ function App() {
           <Route exact path="/" component={FormHome} />
           <Route path="/login" component={Login} />
           <Route path="/guide" component={Guide} />
-          <Route path="/dashboard" component={History} />
-          <StepContext>
-            <Route exact path="/form" component={FormMain} />
-          </StepContext>
+          <PrivateRoute exact path="/dashboard" component={History} />
+          <Route exact path="/form" component={FormMain} />
         </Switch>
       </BrowserRouter>
     </div>

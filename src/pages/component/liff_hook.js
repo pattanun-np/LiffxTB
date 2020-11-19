@@ -22,7 +22,9 @@ function useLiff({ liffId }) {
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      setProfile(await liff.getProfile());
+      const userProfile = await liff.getProfile();
+      setProfile(userProfile);
+      // console.log(userProfile);
     } catch (error) {
       // console.log({ error });
       setError(error);
@@ -49,25 +51,28 @@ function useLiff({ liffId }) {
   };
 
   useEffect(() => {
+    const liffId = "1654260546-VwqZxy4o";
     if (liffId) {
+      // console.log(liffId);
       initLiff({ liffId });
+      liff.ready.then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          fetchProfile();
+        }
+      });
     }
 
     // prepare liff
-    liff.ready.then(() => {
-      if (!liff.isLoggedIn()) {
-        liff.login();
-      }
-      fetchProfile();
-    });
   }, [liffId]);
 
   return {
     loading,
     error,
-    profile,
     sendMessage,
     closeLiff,
+    profile,
   };
 }
 

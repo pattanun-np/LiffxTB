@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
   makeStyles,
   Card,
@@ -9,11 +9,14 @@ import {
   Button,
   CircularProgress,
 } from "@material-ui/core/";
+
 import { Link } from "react-router-dom";
 import FadeIn from "react-fade-in";
 import useLiff from "../component/liff_hook";
+import { UserProfileContext } from "../Context/userDataProvider";
+// const dotenv = require("dotenv");
+// const env = dotenv.config().parsed;
 const liffId = "1654260546-VwqZxy4o";
-
 const useStyles = makeStyles({
   root: {
     margin: "10px",
@@ -83,6 +86,19 @@ const useStyles = makeStyles({
     fontFamily: "Kanit",
     fontWeight: 300,
     fontStyle: "Bold",
+    fontSize: "25px",
+  },
+  textName: {
+    color: "white",
+    marginTop: 10,
+    fontFamily: "Kanit",
+    fontWeight: 300,
+    fontStyle: "Bold",
+    fontSize: "20px",
+    padding: "0.7rem",
+    borderRadius: 50,
+    background:
+      "radial-gradient( circle 465px at -15.1% -25%,  rgba(130,130,193,1) 0%, rgba(67,166,238,1) 49%, rgba(126,203,244,1) 90.2% )",
   },
 });
 const defaultProps = {
@@ -94,13 +110,24 @@ const defaultProps = {
 
 export default function FormHome() {
   const classes = useStyles();
-  const [loading, setLoading] = React.useState(true);
-  const { profile } = useLiff({
-    liffId,
-  });
-  setInterval(() => {
+  const [loading, setLoading] = useState(true);
+  const { profileInfo, setUserProfile } = useContext(UserProfileContext);
+  const { profile } = useLiff({ liffId });
+  const [link, setLink] = useState("");
+  setTimeout(async () => {
     setLoading(false);
-  }, 2000);
+    await setUserProfile(profile);
+    await setLink(
+      profileInfo !== null
+        ? "/form?userId=" +
+            profileInfo.userId +
+            "&name=" +
+            profileInfo.displayName
+        : ""
+    );
+    // console.log(profile);
+  }, 1000);
+
   return (
     <div>
       <Card className={classes.root}>
@@ -112,25 +139,34 @@ export default function FormHome() {
           ) : (
             <div>
               <FadeIn>
-                {profile && (
-                  <Box display="flex" justifyContent="center">
-                    <div>
+                <Box display="flex" justifyContent="center">
+                  <div>
+                    {profileInfo && (
                       <Avatar
-                        alt={profile.displayName}
-                        src={profile.pictureUrl}
+                        alt={
+                          profileInfo.displayName !== "undefined"
+                            ? profileInfo.displayName
+                            : "img"
+                        }
+                        src={
+                          profileInfo.pictureUrl !== "undefined"
+                            ? profileInfo.pictureUrl
+                            : "https://www.flaticon.com/svg/static/icons/svg/149/149071.svg"
+                        }
                         {...defaultProps}
                       />
-                    </div>
-                  </Box>
-                )}
-                {profile && (
-                  <Box display="flex" justifyContent="center">
-                    <Typography className={classes.text}>
-                      สวัสดีครับคุณ<br></br>
-                      {profile.displayName}
+                    )}
+                    <Typography className={classes.text}>สวัสดีครับ</Typography>
+                  </div>
+                </Box>
+
+                <Box display="flex" justifyContent="center">
+                  {profileInfo && (
+                    <Typography className={classes.textName}>
+                      คุณ {profileInfo.displayName}
                     </Typography>
-                  </Box>
-                )}
+                  )}
+                </Box>
               </FadeIn>
             </div>
           )}
@@ -138,7 +174,7 @@ export default function FormHome() {
         <FadeIn>
           <Box display="flex" justifyContent="center">
             <Button size="large" className={classes.Button}>
-              <Link to="/form" style={{ color: "white" }}>
+              <Link to={link} style={{ color: "white" }}>
                 <i className="fas fa-notes-medical"></i>&nbsp;
                 ตอบแบบคัดกรองวัณโรคปอด
               </Link>
@@ -152,13 +188,13 @@ export default function FormHome() {
               </Link>
             </Button>
           </Box>
-          {/* <Box display="flex" justifyContent="center">
+          <Box display="flex" justifyContent="center">
             <Button size="large" className={classes.Buttondashboard}>
               <Link to="/dashboard" style={{ color: "white" }}>
                 <i class="fas fa-tachometer-alt"></i>&nbsp; เฉพาะเจ้าหน้าที่
               </Link>
             </Button>
-          </Box> */}
+          </Box>
           <Box display="flex" justifyContent="center">
             <Typography>
               <a
