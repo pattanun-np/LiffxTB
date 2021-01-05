@@ -435,7 +435,7 @@ export default function FormMain() {
                   )}
                 </Box>
                 <Box display="flex" justifyContent="center">
-                  <QRCode value={finalData.QrLink} />
+                  //<QRCode value={finalData.QrLink} />
                   {/* {finalData.QrLink} */}
                 </Box>
                 <Box
