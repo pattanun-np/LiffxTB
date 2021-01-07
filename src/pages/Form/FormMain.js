@@ -32,7 +32,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AssignmentOutlinedIcon from "@material-ui/icons/AssignmentOutlined";
 import { StoreContext } from "../Context/store";
 import useLiff from "../component/liff_hook";
-import QRCode from "react-qr-code";
+//import QRCode from "react-qr-code";
 
 const defaultOptions = {
   loop: true,
