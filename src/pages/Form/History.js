@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   TablePagination,
@@ -13,8 +13,9 @@ import {
   Button,
   Typography,
 } from "@material-ui/core/";
+import axios from "axios";
 import HomeIcon from "@material-ui/icons/Home";
-import TableChartIcon from '@material-ui/icons/TableChart';
+
 import swal from "sweetalert";
 const useStyles = makeStyles({
   root: {
@@ -66,7 +67,9 @@ const useStyles = makeStyles({
 });
 const columns = [
   { id: "Date", label: "วันที่คัดกรอง", minWidth: 170 },
-  { id: "UniqCode", label: "รหัสอ้างอิง", minWidth: 100 },
+  { id: "UniqCode", label: "รหัสอ้างอิง", minWidth: 170 },
+  { id: "Name", label: "ชื่อ", minWidth: 200 },
+  { id: "Age", label: "อายุ", minWidth: 200 },
   {
     id: "Gender",
     label: "เพศ",
@@ -90,27 +93,18 @@ const columns = [
   },
 ];
 
-function createData(Date, UniqCode, Gender, Score, Result) {
-  return { Date, UniqCode, Gender, Score, Result };
+function createData(Date, UniqCode,Name,Age, Gender, Score, Result) {
+  return { Date, UniqCode,Name,Age, Gender, Score, Result };
 }
 
-const rows = [
-  createData("01/05/2020", "214wq", "หญิง", 3, "เสี่ยง"),
-  createData("01/08/2020", "463wr", "ชาย", 0, "ไม่เสียง"),
-  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
-  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
-  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
-  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
-  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
-  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
-  createData("01/08/2020", "443wr", "ชาย", 0, "ไม่เสียง"),
-];
 
+const rows=[];
 export default function StepperForm() {
   const classes = useStyles();
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [loading, setLoding] = useState(true)
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -134,6 +128,53 @@ export default function StepperForm() {
       }
     });
   };
+
+  const getData = async ()=>{
+    const token = localStorage.getItem("token")
+    var api_url = "https://tb-check-report-api.herokuapp.com/"
+    var api_route ="api/v1/"
+    var url = api_url+api_route;
+    
+    await axios.post(
+        url+"data?token="+token+"&n="+0+"&skip="+0
+          )
+          .then(
+            (response) => {
+              setTimeout(() => {
+                setLoding(false)
+                
+                const data = response.data.result
+                data.map((id,idx)=>{
+                  // console.log(id)
+                  const time = new Date(id.screened_time).toLocaleDateString("th-TH", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    weekday: "long",
+                  })
+                  const refcode = id.data.RefCode
+                  const name = id.data.name.toString();
+                  const gender = id.data.UserInfo.Gender
+                  const age = id.data.UserInfo.Age
+                  const score = id.data.Score
+                  const isrisk = id.data.IsRisk.toString();
+
+                  rows.push(createData(time,refcode, name, age,gender,score,isrisk))
+                  return rows
+                })
+            
+              }, 2000);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+
+  }
+  useEffect(() => {
+    getData()
+  
+  },[]);
   return (
     <Paper className={classes.root}>
       <Button
@@ -148,7 +189,8 @@ export default function StepperForm() {
           ประวัติการคัดกรอง
         </Typography>
       </Grid>
-
+      {loading?(<div>Loading ... </div>
+      ):(<div>
       <TableContainer className={classes.container}>
         <Table
           stickyHeader
@@ -203,22 +245,17 @@ export default function StepperForm() {
           </TableBody>
         </Table>
       </TableContainer>
+
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 100]}
+        rowsPerPageOptions={[5, 10, 25,50, 100]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-<Button
-        startIcon={<TableChartIcon/>}
-        className={classes.ButtonHome}
-       
-      >
-       Exort to CSV file
-      </Button>
+      /></div>)}
+
     </Paper>
   );
 }

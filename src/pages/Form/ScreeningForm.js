@@ -19,6 +19,8 @@ import {
 import question from "./Question";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import swal from "sweetalert";
+const dotenv = require('dotenv')
+dotenv.config()
 const useStyles = makeStyles({
   root: {
     minWidth: "320px",
@@ -183,9 +185,11 @@ export default function Information() {
     }
   }
   function recordData(userId, user_data) {
-    axios
-      .post(
-        "https://tb-check-report-api.herokuapp.com/api/record?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUGF0dGFudW4gTnVtcG9uZyIsInBhc3N3b3JkIjoic3NyZzgzNCJ9.g-r1MSNdircjhOC98wcaJ1sFg5zaMSupVLW4h68rgnc",
+    var api_url = "https://tb-check-report-api.herokuapp.com/"
+    var api_route ="api/v1"
+ 
+    axios.post(
+    api_url+api_route+"record?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUGF0dGFudW4gTnVtcG9uZyIsInBhc3N3b3JkIjoic3NyZzgzNCJ9.g-r1MSNdircjhOC98wcaJ1sFg5zaMSupVLW4h68rgnc",
         {
           user_id: userId,
           user_data: user_data,
@@ -216,11 +220,14 @@ export default function Information() {
     return uuid;
   }
   function submitData() {
+    var api_url = "https://tb-check-report-api.herokuapp.com/"
+    var api_route ="api/v1"
+    
     if (Object.keys(userData).length === 8) {
       setActiveStep(activeStep + 1);
       const refcode = create_UUID();
       const QrLink =
-        "https://tb-check-report-api.herokuapp.com/tracker?refcode=?" + refcode;
+        api_url+api_route+"tracker?refcode=?" + refcode;
       setFinalData({
         Score: CalculateScore(userData),
         UserInfo: ExactInfo(userData),

@@ -127,7 +127,6 @@ export default function FormHome() {
     );
     // console.log(profile);
   }, 1000);
-
   return (
     <div>
       <Card className={classes.root}>

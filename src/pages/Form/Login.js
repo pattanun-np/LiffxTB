@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   makeStyles,
   Card,
@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core/";
 import { Link } from "react-router-dom";
 import FadeIn from "react-fade-in";
-
+import axios from "axios";
 import HomeIcon from "@material-ui/icons/Home";
 import swal from "sweetalert";
 const useStyles = makeStyles({
@@ -89,6 +89,8 @@ const useStyles = makeStyles({
 
 export default function Login() {
   const classes = useStyles();
+  const [userLogin, setUserLogin] = useState({"username":"","password":""});
+  const [msg, setMsg] = useState("");
   const handleConfrim = () => {
     swal({
       title: "คุณกำลังจะกลับไปหน้าหลัก ?",
@@ -103,6 +105,35 @@ export default function Login() {
       }
     });
   };
+  function login(){
+    var api_url = "https://tb-check-report-api.herokuapp.com/"
+    var api_route ="api/v1/"
+    var url = api_url+api_route
+    if  (userLogin['username'].length> 0  && userLogin['password'].length > 0){
+      axios.post(
+        url+"login",
+            {
+              username: userLogin['username'],
+              password: userLogin['password'],
+            }
+          )
+          .then(
+            (response) => {
+              setTimeout(() => {
+                console.log(response.data)
+                localStorage.setItem("token", response.data.token);
+            
+              }, 5000);
+            },
+            (error) => {
+              console.log(error.text);
+            }
+          );
+        }else{
+      setMsg("Please Input Usernaame & Password")
+      console.log(msg);
+    }
+  }
   return (
     <div>
       <Card className={classes.root}>
@@ -121,31 +152,38 @@ export default function Login() {
           </Box>
           <Box display="flex" justifyContent="center">
             <TextField
-              id="age"
-              name="age"
+              id="username"
+              name="username"
               className={classes.Input}
-              type="Email"
+              type="text"
               variant="outlined"
-              label={<p style={{ fontFamily: "Kanit" }}>Email: </p>}
-              endAdornment={<InputAdornment position="end">ปี</InputAdornment>}
+              label={<p style={{ fontFamily: "Kanit" }}>Username</p>}
+              endAdornment={<InputAdornment position="end"></InputAdornment>}
               margin="normal"
+              onChange={(e) => {
+                setUserLogin({ ...userLogin, username: e.target.value });
+              }}
             />
           </Box>
           <Box display="flex" justifyContent="center">
             <TextField
-              id="age"
-              name="age"
+              id="password"
+              name="password"
               className={classes.Input}
               type="password"
               variant="outlined"
-              label={<p style={{ fontFamily: "Kanit" }}>Password: </p>}
-              endAdornment={<InputAdornment position="end">ปี</InputAdornment>}
+              label={<p style={{ fontFamily: "Kanit" }}>Password</p>}
+              endAdornment={<InputAdornment position="end"></InputAdornment>}
               margin="normal"
+              onChange={(e) => {
+                setUserLogin({ ...userLogin, password: e.target.value });
+              }}
             />
           </Box>
           <Box display="flex" justifyContent="center">
-            <Button size="large" className={classes.Buttondashboard}>
-              <Link to="/dashboard" style={{ color: "white" }}>
+            <Button size="large" className={classes.Buttondashboard} 
+            onClick={() => login()}>
+            <Link to="/dashboard" style={{ color: "white" }}>
                 <i class="fas fa-user"></i>&nbsp; Login
               </Link>
             </Button>
