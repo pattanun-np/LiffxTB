@@ -19,7 +19,7 @@ import * as loadingData from "../component/Loading/loading.json";
 import Lottie from "react-lottie";
 import swal from "sweetalert";
 import useLiff from "../component/liff_hook";
-import { UserProfileContext } from "../Context/userDataProvider";
+import { UserDasboardContext } from "../Context/userDashboardProvider";
 const liffId = "1654260546-31oNME8P";
 
 const defaultOptions = {
@@ -126,22 +126,22 @@ export default function StepperForm() {
   const classes = useStyles()
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true)
-  const { profileInfo, setUserProfile } = useContext(UserProfileContext);
+  const { userDashboard, setUserDashboard } = useContext(UserDasboardContext);
   const { profile } = useLiff({ liffId });
   const [uid, setUid] = useState("");
   const [name, setName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   setTimeout(async () => {
     setLoading(false);
-    await setUserProfile(profile);
+    await  setUserDashboard(profile);
     await setUid(
-      profileInfo !== null
-        ? profileInfo.userId 
+      userDashboard !== null
+        ? userDashboard.userId 
         : ""
     );
     await setName(
-      profileInfo !== null
-        ? profileInfo.displayName
+      userDashboard !== null
+        ? userDashboard.displayName
         : ""
     );
     // console.log(profile);

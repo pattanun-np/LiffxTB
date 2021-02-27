@@ -4,7 +4,6 @@ export const StoreContext = createContext({});
 export const StoreContextProvider = ({ children }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [userData, setUserData] = useState("");
-
   const [finalData, setFinalData] = useState({
     UserInfo: "",
     Score: "",
