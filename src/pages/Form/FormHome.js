@@ -187,13 +187,7 @@ export default function FormHome() {
               </Link>
             </Button>
           </Box>
-          <Box display="flex" justifyContent="center">
-            <Button size="large" className={classes.Buttondashboard}>
-              <Link to="/dashboard" style={{ color: "white" }}>
-                <i class="fas fa-tachometer-alt"></i>&nbsp; เฉพาะเจ้าหน้าที่
-              </Link>
-            </Button>
-          </Box>
+       
           <Box display="flex" justifyContent="center">
             <Typography>
               <a

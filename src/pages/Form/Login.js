@@ -6,14 +6,25 @@ import {
   Typography,
   Button,
   TextField,
+  Collapse,
   InputAdornment,
   //   CircularProgress,
 } from "@material-ui/core/";
-import { Link } from "react-router-dom";
+import * as loadingData from "../component/Loading/loading.json";
+import { Alert, AlertTitle } from "@material-ui/lab";
+import Lottie from "react-lottie";
 import FadeIn from "react-fade-in";
 import axios from "axios";
 import HomeIcon from "@material-ui/icons/Home";
 import swal from "sweetalert";
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 const useStyles = makeStyles({
   root: {
     margin: "10px",
@@ -55,6 +66,7 @@ const useStyles = makeStyles({
     height: "24px",
     width: "56px",
   },
+
   Buttoninfo: {
     background:
       "linear-gradient( 200.6deg,  rgba(255,207,84,1) 11.2%, rgba(255,158,27,1) 91.1% )",
@@ -89,8 +101,14 @@ const useStyles = makeStyles({
 
 export default function Login() {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const [Loading, setLoading] = React.useState(false);
   const [userLogin, setUserLogin] = useState({"username":"","password":""});
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState({"status":"", "message":""});
+
+
+
   const handleConfrim = () => {
     swal({
       title: "คุณกำลังจะกลับไปหน้าหลัก ?",
@@ -105,12 +123,15 @@ export default function Login() {
       }
     });
   };
-  function login(){
+
+
+  const login = async ()=>{
     var api_url = "https://tb-check-report-api.herokuapp.com/"
     var api_route ="api/v1/"
     var url = api_url+api_route
+    setLoading(true)
     if  (userLogin['username'].length> 0  && userLogin['password'].length > 0){
-      axios.post(
+      await axios.post(
         url+"login",
             {
               username: userLogin['username'],
@@ -119,25 +140,40 @@ export default function Login() {
           )
           .then(
             (response) => {
-              setTimeout(() => {
-                console.log(response.data)
-                localStorage.setItem("token", response.data.token);
-            
-              }, 5000);
+             
+    
+                if (response.status === 200){
+                 
+                  localStorage.setItem("token", response.data.token);
+                  setMsg({...msg, status:"success"})
+                  setMsg({...msg,  message:"Login Success"})
+                  setOpen(true)
+                  setTimeout(() => {
+                  setOpen(false)
+                  window.location = "/dashboard";
+                },500)
+                }
+               
             },
             (error) => {
-              console.log(error.text);
+              console.log(error.message)
+              setLoading(false)
+              setMsg({...msg, status:"warning"})
+              setMsg({...msg, message:"Invilid username or password"})
+              setOpen(true)
+              setTimeout(() => {
+
+                setOpen(false)
+              },500)
             }
           );
-        }else{
-      setMsg("Please Input Usernaame & Password")
-      console.log(msg);
-    }
+        }
   }
+
   return (
     <div>
-      <Card className={classes.root}>
-        <FadeIn>
+           <Card className={classes.root}>
+      {!Loading?( <FadeIn>
           <Button
             startIcon={<HomeIcon />}
             className={classes.ButtonHome}
@@ -145,15 +181,22 @@ export default function Login() {
           >
             กลับ
           </Button>
+     
           <Box display="flex" justifyContent="center">
             <Typography className={classes.text}>
               โปรดเข้าสู่ระบบเพื่อดูข้อมูล
             </Typography>
           </Box>
+        <Collapse in={open}>
+          <Alert severity={msg.status} style={{ fontFamily: "Kanit"}}>
+            <AlertTitle style={{ fontFamily: "Kanit" }}>{msg.message}</AlertTitle>
+          </Alert>
+        </Collapse>
           <Box display="flex" justifyContent="center">
             <TextField
               id="username"
               name="username"
+              value={userLogin.username}
               className={classes.Input}
               type="text"
               variant="outlined"
@@ -169,6 +212,7 @@ export default function Login() {
             <TextField
               id="password"
               name="password"
+              value={userLogin.password}
               className={classes.Input}
               type="password"
               variant="outlined"
@@ -181,13 +225,12 @@ export default function Login() {
             />
           </Box>
           <Box display="flex" justifyContent="center">
-            <Button size="large" className={classes.Buttondashboard} 
-            onClick={() => login()}>
-            <Link to="/dashboard" style={{ color: "white" }}>
-                <i class="fas fa-user"></i>&nbsp; Login
-              </Link>
+            <Button size="large" className={classes.Buttondashboard} style={{ color: "white" }} onClick={login}>
+            <i class="fas fa-user"></i>&nbsp; Login
             </Button>
           </Box>
+       
+          
           <Box display="flex" justifyContent="center">
             <Typography>
               <a
@@ -198,7 +241,14 @@ export default function Login() {
               </a>
             </Typography>
           </Box>
-        </FadeIn>
+        </FadeIn>):(<Lottie
+    options={defaultOptions}
+    height={140}
+    width={140}
+  />)}
+ 
+       
+    
       </Card>
     </div>
   );

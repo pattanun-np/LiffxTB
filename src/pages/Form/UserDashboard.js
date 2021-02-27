@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext  } from "react";
 import {
   makeStyles,
   TablePagination,
@@ -15,12 +15,12 @@ import {
 } from "@material-ui/core/";
 import axios from "axios";
 import HomeIcon from "@material-ui/icons/Home";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import * as loadingData from "../component/Loading/loading.json";
 import Lottie from "react-lottie";
 import swal from "sweetalert";
-
-
+import useLiff from "../component/liff_hook";
+import { UserProfileContext } from "../Context/userDataProvider";
+const liffId = "1654260546-VwqZxy4o";
 
 const defaultOptions = {
   loop: true,
@@ -126,8 +126,26 @@ export default function StepperForm() {
   const classes = useStyles()
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true)
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  const { profileInfo, setUserProfile } = useContext(UserProfileContext);
+  const { profile } = useLiff({ liffId });
+  const [uid, setUid] = useState("");
+  const [name, setName] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  setTimeout(async () => {
+    setLoading(false);
+    await setUserProfile(profile);
+    await setUid(
+      profileInfo !== null
+        ? profileInfo.userId 
+        : ""
+    );
+    await setName(
+      profileInfo !== null
+        ? profileInfo.displayName
+        : ""
+    );
+    // console.log(profile);
+  }, 1000);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -152,21 +170,20 @@ export default function StepperForm() {
   };
 
   useEffect(() => {
-    getData()
+    getData(uid)
   
-  },[page,rowsPerPage]);
-  const getData = async ()=>{
+  },[uid,page,rowsPerPage]);
+  const getData = async (uid)=>{
     const token = localStorage.getItem("token")
     var api_url = "https://tb-check-report-api.herokuapp.com/"
     var api_route ="api/v1/"
     var url = api_url+api_route;
     await axios.post(
-        url+"data?token="+token+"&n="+0+"&skip="+0
+        url+"screenlog/"+uid+"?token="+token+"&n="+0+"&skip="+0
           )
           .then(
             (response) => {
               setTimeout(() => {
-                setLoading(false)
                 
                 const data = response.data.result
                 data.map((id,idx)=>{
@@ -184,7 +201,7 @@ export default function StepperForm() {
                   const score = id.data.Score
                   const isrisk = id.data.IsRisk.toString();
                   rows.push(createData(time,refcode, name, age,gender,score,isrisk))
-                  
+                  setLoading(false)
                   return rows
                 })
             
@@ -196,24 +213,7 @@ export default function StepperForm() {
           );
 
   }
-  const logout=()=>{
-    localStorage.removeItem("token");
-    window.location = "/login";
-  }
-  const handleLogout = () => {
-    swal({
-      title: "คุณต้องการออกจากระบบ ?",
-      text: "",
-      icon: "info",
-      buttons: ["ยกเลิก", "ตกลง"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        logout()
-      } else {
-      }
-    });
-  };
+
 
 
   return (
@@ -225,16 +225,10 @@ export default function StepperForm() {
       >
         กลับ
       </Button>
-      <Button
-            startIcon={<ExitToAppIcon />}
-            className={classes.ButtonLogout}
-            onClick={handleLogout}
-          >
-            ออกจากระบบ
-          </Button>
+     
       <Grid container justify="center">
         <Typography style={{ fontFamily: "Kanit" }}>
-          ประวัติการคัดกรอง
+          ประวัติการคัดกรองของ {"คุณ"+name}
         </Typography>
       </Grid>
       {loading?(<Lottie
@@ -299,7 +293,7 @@ export default function StepperForm() {
       </TableContainer>
 
       <TablePagination
-        rowsPerPageOptions={[ 10, 25,50, 100]}
+        rowsPerPageOptions={[5, 10]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}
