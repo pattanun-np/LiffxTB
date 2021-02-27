@@ -20,7 +20,7 @@ import Lottie from "react-lottie";
 import swal from "sweetalert";
 import useLiff from "../component/liff_hook";
 import { UserProfileContext } from "../Context/userDataProvider";
-const liffId = "1654260546-VwqZxy4o";
+const liffId = "1654260546-31oNME8P";
 
 const defaultOptions = {
   loop: true,
