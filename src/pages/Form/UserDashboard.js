@@ -174,13 +174,11 @@ export default function StepperForm() {
   
   },[uid,page,rowsPerPage]);
   const getData = async (uid)=>{
-    const token = localStorage.getItem("token")
     var api_url = "https://tb-check-report-api.herokuapp.com/"
     var api_route ="api/v1/"
     var url = api_url+api_route;
     await axios.post(
-        url+"screenlog/"+uid+"?token="+token+"&n="+0+"&skip="+0
-          )
+        url+"screenlog/"+uid+"?&n="+0+"&skip="+0)
           .then(
             (response) => {
               setTimeout(() => {
