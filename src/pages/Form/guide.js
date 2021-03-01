@@ -57,7 +57,7 @@ export default function StepperForm() {
           <CardContent>
             <Box display="flex">
               <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;แบบคัดกรองวัณโรคปอดในเว็บแอปพลิเคชันบอทน้อยดิจิตอลด๊อกเตอร์
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;แบบคัดกรองวัณโรคปอดในเว็บแอปพลิเคชั่นดิจิตอลด๊อกเตอร์
                 พัฒนาโดยสำนักงานป้องกันควบคุมโรคที่ 9
                 จังหวัดนครราชสีมาได้รับการสนับสนุนจาก&nbsp;
                 <a href="http://botnoigroup.com/">
