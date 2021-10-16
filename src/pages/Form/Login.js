@@ -104,8 +104,8 @@ export default function Login() {
   const [open, setOpen] = React.useState(false);
 
   const [Loading, setLoading] = React.useState(false);
-  const [userLogin, setUserLogin] = useState({"username":"","password":""});
-  const [msg, setMsg] = useState({"status":"", "message":""});
+  const [userLogin, setUserLogin] = useState({ "username": "", "password": "" });
+  const [msg, setMsg] = useState({ "status": "", "message": "" });
 
 
 
@@ -125,55 +125,55 @@ export default function Login() {
   };
 
 
-  const login = async ()=>{
+  const login = async () => {
     var api_url = "https://tb-check-report-api.herokuapp.com/"
-    var api_route ="api/v1/"
-    var url = api_url+api_route
+    var api_route = "api/v1/"
+    var url = api_url + api_route
     setLoading(true)
-    if  (userLogin['username'].length> 0  && userLogin['password'].length > 0){
+    if (userLogin['username'].length > 0 && userLogin['password'].length > 0) {
       await axios.post(
-        url+"login",
-            {
-              username: userLogin['username'],
-              password: userLogin['password'],
-            }
-          )
-          .then(
-            (response) => {
-             
-    
-                if (response.status === 200){
-                 
-                  localStorage.setItem("token", response.data.token);
-                  setMsg({...msg, status:"success"})
-                  setMsg({...msg,  message:"Login Success"})
-                  setOpen(true)
-                  setTimeout(() => {
-                  setOpen(false)
-                  window.location = "/dashboard";
-                },500)
-                }
-               
-            },
-            (error) => {
-              console.log(error.message)
-              setLoading(false)
-              setMsg({...msg, status:"warning"})
-              setMsg({...msg, message:"Invilid username or password"})
+        url + "login",
+        {
+          username: userLogin['username'],
+          password: userLogin['password'],
+        }
+      )
+        .then(
+          (response) => {
+
+
+            if (response.status === 200) {
+
+              localStorage.setItem("token", response.data.token);
+              setMsg({ ...msg, status: "success" })
+              setMsg({ ...msg, message: "Login Success" })
               setOpen(true)
               setTimeout(() => {
-
                 setOpen(false)
-              },500)
+                window.location = "/dashboard";
+              }, 500)
             }
-          );
-        }
+
+          },
+          (error) => {
+            console.log(error.message)
+            setLoading(false)
+            setMsg({ ...msg, status: "warning" })
+            setMsg({ ...msg, message: "Invilid username or password" })
+            setOpen(true)
+            setTimeout(() => {
+
+              setOpen(false)
+            }, 500)
+          }
+        );
+    }
   }
 
   return (
     <div>
-           <Card className={classes.root}>
-      {!Loading?( <FadeIn>
+      <Card className={classes.root}>
+        {!Loading ? (<FadeIn>
           <Button
             startIcon={<HomeIcon />}
             className={classes.ButtonHome}
@@ -181,17 +181,17 @@ export default function Login() {
           >
             กลับ
           </Button>
-     
+
           <Box display="flex" justifyContent="center">
             <Typography className={classes.text}>
               โปรดเข้าสู่ระบบเพื่อดูข้อมูล
             </Typography>
           </Box>
-        <Collapse in={open}>
-          <Alert severity={msg.status} style={{ fontFamily: "Kanit"}}>
-            <AlertTitle style={{ fontFamily: "Kanit" }}>{msg.message}</AlertTitle>
-          </Alert>
-        </Collapse>
+          <Collapse in={open}>
+            <Alert severity={msg.status} style={{ fontFamily: "Kanit" }}>
+              <AlertTitle style={{ fontFamily: "Kanit" }}>{msg.message}</AlertTitle>
+            </Alert>
+          </Collapse>
           <Box display="flex" justifyContent="center">
             <TextField
               id="username"
@@ -226,29 +226,29 @@ export default function Login() {
           </Box>
           <Box display="flex" justifyContent="center">
             <Button size="large" className={classes.Buttondashboard} style={{ color: "white" }} onClick={login}>
-            <i class="fas fa-user"></i>&nbsp; Login
+              <i class="fas fa-user"></i>&nbsp; Login
             </Button>
           </Box>
-       
-          
+
+
           <Box display="flex" justifyContent="center">
             <Typography>
               <a
                 href="https://github.com/pattanunNP"
                 style={{ fontSize: "10px" }}
               >
-                Copyright © 2020 All Right Revesed By pattanunNP
+                Copyright © 2020-2021 All Right Revesed By pattanunNP
               </a>
             </Typography>
           </Box>
-        </FadeIn>):(<Lottie
-    options={defaultOptions}
-    height={140}
-    width={140}
-  />)}
- 
-       
-    
+        </FadeIn>) : (<Lottie
+          options={defaultOptions}
+          height={140}
+          width={140}
+        />)}
+
+
+
       </Card>
     </div>
   );

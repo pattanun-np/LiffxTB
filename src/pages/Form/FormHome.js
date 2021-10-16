@@ -120,9 +120,9 @@ export default function FormHome() {
     await setLink(
       profileInfo !== null
         ? "/form?userId=" +
-            profileInfo.userId +
-            "&name=" +
-            profileInfo.displayName
+        profileInfo.userId +
+        "&name=" +
+        profileInfo.displayName
         : ""
     );
     // console.log(profile);
@@ -187,14 +187,14 @@ export default function FormHome() {
               </Link>
             </Button>
           </Box>
-       
+
           <Box display="flex" justifyContent="center">
             <Typography>
               <a
                 href="https://github.com/pattanunNP"
                 style={{ fontSize: "10px" }}
               >
-                Copyright © 2020 All Right Revesed By pattanunNP
+                Copyright © 2020-2021 All Right Revesed By pattanunNP
               </a>
             </Typography>
           </Box>
