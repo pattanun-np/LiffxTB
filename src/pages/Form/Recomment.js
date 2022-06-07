@@ -8,8 +8,8 @@ const reccomment = [
   {
     id: 2,
     img:
-      "https://res.cloudinary.com/image-chatbot/image/upload/v1599243885/nok/glass-of-water_lbcs79.png",
-    recomment: "2. แยกของใช้ส่วนตัวจากผู้อื่น อาทิ แก้วน้ำ จาน ชาม ช้อน",
+      "https://res.cloudinary.com/image-chatbot/image/upload/v1654605598/nok/exercises_l5scwa.png",
+    recomment: "2. ดูแลสุขภาพร่างกายให้แข็งแรงโดยการออกกำลังกาย พักผ่อนให้เพียงพอ รับประทานอาหารที่มีประโยชน์",
   },
   {
     id: 3,
@@ -20,9 +20,16 @@ const reccomment = [
   {
     id: 4,
     img:
+      "https://res.cloudinary.com/image-chatbot/image/upload/v1654605598/nok/no-smoking_bhcyji.png",
+    recomment:
+      "4. งดสูบบุหรี่ งดดื่มสุรา",
+  },
+  {
+    id: 5,
+    img:
       "https://res.cloudinary.com/image-chatbot/image/upload/v1599243703/nok/doctor_sgwxrw.png",
     recomment:
-      "4. พบแพทย์ที่โรงพยาบาลใกล้บ้านเพื่อขอคำปรึกษาเพื่อตรวจอย่างละเอียดว่าใช่วัณโรคหรือไม่?",
+      "5. พบแพทย์ที่โรงพยาบาลใกล้บ้านเพื่อขอคำปรึกษาเพื่อตรวจอย่างละเอียดว่าใช่วัณโรคหรือไม่?",
   },
 ];
 export default reccomment;
