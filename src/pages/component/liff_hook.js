@@ -5,6 +5,7 @@ function useLiff({ liffId }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [access_token, setAccessToken] = useState(null);
 
   const initLiff = async ({ liffId }) => {
     setLoading(true);
@@ -19,12 +20,17 @@ function useLiff({ liffId }) {
     }
   };
 
+
+
   const fetchProfile = async () => {
     setLoading(true);
     try {
       const userProfile = await liff.getProfile();
+
+
       setProfile(userProfile);
-      // console.log(userProfile);
+
+
     } catch (error) {
       // console.log({ error });
       setError(error);
@@ -51,7 +57,7 @@ function useLiff({ liffId }) {
   };
 
   useEffect(() => {
-    const liffId = "1654260546-VwqZxy4o";
+
     if (liffId) {
       // console.log(liffId);
       initLiff({ liffId });
@@ -60,6 +66,9 @@ function useLiff({ liffId }) {
           liff.login();
         } else {
           fetchProfile();
+          const access_token = liff.getAccessToken();
+          setAccessToken(access_token)
+          // console.log('Access token: ' + access_token)
         }
       });
     }
@@ -73,6 +82,7 @@ function useLiff({ liffId }) {
     sendMessage,
     closeLiff,
     profile,
+    access_token
   };
 }
 

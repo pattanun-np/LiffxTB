@@ -16,7 +16,7 @@ import useLiff from "../component/liff_hook";
 import { UserProfileContext } from "../Context/userDataProvider";
 // const dotenv = require("dotenv");
 // const env = dotenv.config().parsed;
-const liffId = "1654260546-VwqZxy4o";
+const liffId = "1654260546-B8WOe7AD";
 const useStyles = makeStyles({
   root: {
     margin: "10px",
@@ -112,6 +112,7 @@ export default function FormHome() {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const { profileInfo, setUserProfile } = useContext(UserProfileContext);
+  // const liffId = "1654260546-B8WOe7AD";
   const { profile } = useLiff({ liffId });
   const [link, setLink] = useState("");
   setTimeout(async () => {
@@ -174,15 +175,15 @@ export default function FormHome() {
           <Box display="flex" justifyContent="center">
             <Button size="large" className={classes.Button}>
               <Link to={link} style={{ color: "white" }}>
-                <i className="fas fa-notes-medical"></i>&nbsp;
+                <i className="fas fa-notes-medical"></i>&ensp;
                 ตอบแบบคัดกรองวัณโรคปอด
               </Link>
             </Button>
           </Box>
           <Box display="flex" justifyContent="center">
             <Button size="large" className={classes.Button3}>
-              <Link to="/guide" style={{ color: "white" }}>
-                <i className="fas fa-question-circle"></i>&nbsp;
+              <Link to="/about" style={{ color: "white" }}>
+                <i className="fas fa-question-circle"></i>&ensp;
                 เกี่ยวกับแบบคัดกรองนี้
               </Link>
             </Button>
